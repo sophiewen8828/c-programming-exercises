@@ -1,0 +1,2527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Five Classic C Programming Exercises — An Illustrated Study Guide</title>
+<style>
+:root{
+  --ink:#1b2733;
+  --muted:#5c6b7a;
+  --paper:#fbfaf7;
+  --panel:#ffffff;
+  --navy:#1f3a5f;
+  --navy-deep:#14283f;
+  --navy-soft:#e9eff7;
+  --accent:#a85a12;
+  --accent-soft:#fdf2e5;
+  --green:#175f49;
+  --green-soft:#e7f3ed;
+  --red:#962f2f;
+  --red-soft:#fbeaea;
+  --purple:#5a4685;
+  --purple-soft:#f1edf9;
+  --line:#d8dee6;
+  --code-bg:#12202f;
+  --code-ink:#eaf0f7;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:17px;
+  line-height:1.68;
+}
+a{color:var(--navy);text-decoration-thickness:.06em;text-underline-offset:.16em}
+a:hover{color:var(--accent)}
+.skip{position:absolute;left:-9999px;top:0;background:#fff;color:var(--navy);padding:10px 16px;z-index:99}
+.skip:focus{left:12px;top:12px}
+
+/* ---------- Cover ---------- */
+.cover{
+  background:
+    radial-gradient(1200px 500px at 15% -10%,rgba(255,255,255,.14),transparent 60%),
+    linear-gradient(135deg,#14283f 0%,#1f3a5f 55%,#2c517c 100%);
+  color:#f4f8fc;
+  padding:76px 28px 60px;
+  border-bottom:6px solid var(--accent);
+}
+.cover-inner{max-width:1040px;margin:0 auto}
+.eyebrow{
+  font-family:var(--sans);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#bcd2ea;
+  margin:0 0 18px;
+}
+.cover h1{
+  font-family:var(--sans);
+  font-size:clamp(2.3rem,5.2vw,4rem);
+  line-height:1.06;
+  margin:0 0 18px;
+  letter-spacing:-.02em;
+  color:#fff;
+}
+.lede{
+  font-size:clamp(1.05rem,2vw,1.28rem);
+  max-width:760px;
+  margin:0 0 34px;
+  color:#dfeaf5;
+}
+.cover-meta{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  max-width:760px;
+}
+.cover-meta div{
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.07);
+  border-radius:10px;
+  padding:14px 16px;
+}
+.cover-meta strong{
+  display:block;
+  font-family:var(--sans);
+  font-size:1.55rem;
+  line-height:1.1;
+  color:#fff;
+}
+.cover-meta span{
+  font-family:var(--sans);
+  font-size:.78rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#bcd2ea;
+}
+
+/* ---------- Navigation ---------- */
+.toc{
+  max-width:1040px;
+  margin:-26px auto 0;
+  padding:24px 28px;
+  position:relative;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(20,40,63,.10);
+}
+.toc h2{
+  font-family:var(--sans);
+  font-size:.82rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin:0 0 14px;
+}
+.toc ol{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px 22px;
+  counter-reset:toc;
+}
+.toc li{counter-increment:toc}
+.toc a{
+  display:flex;
+  gap:10px;
+  padding:6px 0;
+  font-family:var(--sans);
+  font-size:.94rem;
+  text-decoration:none;
+  border-bottom:1px solid transparent;
+}
+.toc a:hover{border-bottom-color:var(--accent)}
+.toc a::before{
+  content:counter(toc,decimal-leading-zero);
+  color:var(--accent);
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- Page frame ---------- */
+main{max-width:1040px;margin:0 auto;padding:50px 28px 90px}
+section{margin:0 0 72px;scroll-margin-top:20px}
+h2{
+  font-family:var(--sans);
+  font-size:clamp(1.55rem,3vw,2.1rem);
+  line-height:1.18;
+  color:var(--navy);
+  margin:0 0 8px;
+  letter-spacing:-.01em;
+}
+h2 .kicker{
+  display:block;
+  font-size:.74rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:8px;
+}
+h3{
+  font-family:var(--sans);
+  font-size:1.24rem;
+  line-height:1.3;
+  color:var(--navy);
+  margin:38px 0 10px;
+}
+h4{
+  font-family:var(--sans);
+  font-size:1.02rem;
+  color:var(--navy-deep);
+  margin:26px 0 8px;
+}
+p{margin:0 0 16px}
+ul,ol{margin:0 0 18px;padding-left:1.35em}
+li{margin:5px 0}
+strong{color:var(--navy-deep)}
+em{color:inherit}
+.lead{font-size:1.08rem;color:#33475c}
+.rule{height:1px;background:var(--line);border:0;margin:34px 0}
+
+/* ---------- At-a-glance ---------- */
+.glance{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin:24px 0 30px;
+}
+.glance div{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-top:4px solid var(--navy);
+  border-radius:8px;
+  padding:14px 15px;
+}
+.glance dt{
+  font-family:var(--sans);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:5px;
+}
+.glance dd{
+  margin:0;
+  font-family:var(--sans);
+  font-size:.9rem;
+  line-height:1.42;
+  color:var(--ink);
+}
+
+/* ---------- Callout blocks ---------- */
+.box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-left:6px solid var(--navy);
+  border-radius:8px;
+  padding:18px 22px 6px;
+  margin:26px 0;
+  box-shadow:0 1px 2px rgba(0,0,0,.035);
+}
+.box .label{
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:10.5px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--navy);
+  margin:0 0 8px;
+}
+.box p:last-child,.box ul:last-child,.box ol:last-child{margin-bottom:14px}
+.box.concept{border-left-color:var(--navy);background:var(--navy-soft)}
+.box.concept .label{color:var(--navy)}
+.box.design{border-left-color:var(--accent);background:var(--accent-soft)}
+.box.design .label{color:var(--accent)}
+.box.warning{border-left-color:var(--red);background:var(--red-soft)}
+.box.warning .label{color:var(--red)}
+.box.tip{border-left-color:var(--green);background:var(--green-soft)}
+.box.tip .label{color:var(--green)}
+.box.check{border-left-color:var(--purple);background:var(--purple-soft)}
+.box.check .label{color:var(--purple)}
+.box.proof{border-left-color:var(--green);background:#f7fbf9}
+.box.proof .label{color:var(--green)}
+
+/* ---------- Tables ---------- */
+.table-wrap{overflow-x:auto;margin:22px 0 26px}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--panel);
+  font-family:var(--sans);
+  font-size:.9rem;
+  line-height:1.45;
+  border:1px solid var(--line);
+}
+caption{
+  caption-side:top;
+  text-align:left;
+  font-family:var(--sans);
+  font-size:.8rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:0 0 8px;
+}
+th,td{
+  border:1px solid var(--line);
+  padding:9px 12px;
+  vertical-align:top;
+  text-align:left;
+}
+thead th{
+  background:var(--navy);
+  color:#fff;
+  font-size:.78rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  font-weight:700;
+}
+tbody tr:nth-child(even){background:#f7f9fb}
+tbody tr:hover{background:#eef4fa}
+td code,th code,p code,li code{
+  font-family:var(--mono);
+  font-size:.86em;
+  background:#eef1f4;
+  border:1px solid #e1e5ea;
+  border-radius:4px;
+  padding:.08em .32em;
+  white-space:nowrap;
+}
+.table-compact td,.table-compact th{padding:7px 10px}
+.table-compact{font-size:.85rem}
+
+/* ---------- Matrices and diagrams ---------- */
+figure{
+  margin:26px 0;
+  padding:22px 20px 14px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+figcaption{
+  margin-top:14px;
+  font-family:var(--sans);
+  font-size:.82rem;
+  color:var(--muted);
+  line-height:1.5;
+}
+figcaption strong{color:var(--navy)}
+.matrix{
+  width:auto;
+  margin:0 auto;
+  border:0;
+  border-collapse:separate;
+  border-spacing:4px;
+  background:transparent;
+  font-family:var(--mono);
+  font-size:14px;
+}
+.matrix th,.matrix td{
+  border:0;
+  width:46px;
+  height:42px;
+  text-align:center;
+  vertical-align:middle;
+  border-radius:6px;
+  padding:0;
+}
+.matrix th{
+  background:transparent;
+  color:var(--muted);
+  font-family:var(--sans);
+  font-size:.72rem;
+  font-weight:700;
+}
+.matrix td.on{background:#d7e6f6;border:1px solid #8fb3d9;color:#12395f;font-weight:700}
+.matrix td.off{background:#f0f2f4;border:1px solid #e2e6ea;color:#a6afb9}
+.matrix td.hit{background:#fbe3c6;border:2px solid var(--accent);color:#6b3505;font-weight:700}
+.matrix td.axis{background:transparent;color:var(--muted);font-family:var(--sans);font-size:.72rem}
+.spiral td{
+  width:74px;
+  height:64px;
+  position:relative;
+  border:1px solid rgba(20,40,63,.18);
+}
+.spiral .ord{
+  display:block;
+  font-family:var(--sans);
+  font-size:1.28rem;
+  font-weight:800;
+  line-height:1.05;
+}
+.spiral .val{
+  display:block;
+  font-family:var(--mono);
+  font-size:.68rem;
+  color:rgba(20,40,63,.68);
+}
+.spiral .l1{background:#d7e6f6}
+.spiral .l2{background:#fbe3c6}
+.spiral .l3{background:#dcefe4}
+.spiral .arrow{
+  font-family:var(--sans);
+  font-size:.72rem;
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* ---------- Code listings ---------- */
+.listing{
+  margin:26px 0;
+  padding:0;
+  border:1px solid #0c1826;
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--code-bg);
+}
+.listing figcaption{
+  margin:0;
+  padding:10px 16px;
+  background:#0c1826;
+  color:#a9c2dc;
+  border-bottom:1px solid #20364d;
+  font-family:var(--sans);
+  font-size:.76rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.listing pre{
+  margin:0;
+  padding:18px 20px;
+  overflow-x:auto;
+  color:var(--code-ink);
+  font-family:var(--mono);
+  font-size:.84rem;
+  line-height:1.55;
+  tab-size:4;
+}
+.listing code{background:transparent;border:0;padding:0;color:inherit;font-size:inherit;white-space:pre}
+
+/* ---------- Equations and proofs ---------- */
+.equation{
+  margin:22px auto;
+  padding:18px 24px;
+  max-width:760px;
+  text-align:center;
+  font-family:var(--serif);
+  font-size:1.32rem;
+  font-style:italic;
+  color:var(--navy-deep);
+  background:#f4f7fa;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.equation .small{font-size:.74em;font-style:normal;color:var(--muted)}
+.mono{font-family:var(--mono);font-style:normal;font-size:.9em}
+
+/* ---------- Chips and comparison ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.chip{
+  display:inline-block;
+  font-family:var(--mono);
+  font-size:.88rem;
+  padding:5px 11px;
+  border-radius:999px;
+  background:#eef2f6;
+  border:1px solid var(--line);
+}
+.chip.ok{background:var(--green-soft);border-color:#a9d3c1;color:var(--green)}
+.chip.bad{background:var(--red-soft);border-color:#e0b4b4;color:var(--red)}
+.compare{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin:20px 0;
+}
+.compare div{
+  padding:14px 16px;
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:var(--panel);
+}
+.compare h4{margin:0 0 8px}
+.compare .bad{border-top:4px solid var(--red)}
+.compare .good{border-top:4px solid var(--green)}
+.compare p:last-child{margin-bottom:0}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* ---------- Foundation cards ---------- */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  margin:24px 0;
+}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:18px 20px;
+}
+.card h3{margin:0 0 8px;font-size:1.05rem}
+.card p:last-child{margin-bottom:0}
+.card .tag{
+  font-family:var(--sans);
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+
+/* ---------- Figures with SVG ---------- */
+.figure-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:22px;
+  align-items:center;
+  justify-content:center;
+}
+.figure-row > *{flex:1 1 320px}
+svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.legend{
+  font-family:var(--sans);
+  font-size:.86rem;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.legend li{margin:5px 0;padding-left:20px;position:relative}
+.legend li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.62em;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--navy);
+}
+.legend li.out::before{background:var(--red)}
+.legend li.win::before{background:var(--green)}
+
+/* ---------- Footer ---------- */
+footer{
+  border-top:1px solid var(--line);
+  background:#f2f4f7;
+  padding:32px 28px 42px;
+  font-family:var(--sans);
+  font-size:.84rem;
+  color:var(--muted);
+}
+.footer-inner{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{color:var(--navy)}
+
+/* ---------- Responsive / print ---------- */
+@media (max-width:820px){
+  .cover-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .toc ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .glance{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cards,.compare{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .toc ol,.glance{grid-template-columns:1fr}
+  .cover{padding:56px 20px 48px}
+  main{padding:38px 20px 70px}
+}
+/* ---------- Sample I/O and process steps ---------- */
+.sample{
+  background:#f4f6f8;
+  border:1px solid var(--line);
+  border-left:4px solid var(--navy);
+  border-radius:6px;
+  padding:13px 16px;
+  margin:14px 0;
+  overflow-x:auto;
+  font-family:var(--mono);
+  font-size:.86rem;
+  line-height:1.55;
+  white-space:pre;
+}
+.sample strong{font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.steps{counter-reset:step;list-style:none;padding:0;margin:18px 0}
+.steps li{position:relative;padding-left:44px;margin:14px 0}
+.steps li::before{
+  counter-increment:step;
+  content:counter(step);
+  position:absolute;
+  left:0;
+  top:.12em;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:var(--navy);
+  color:#fff;
+  font-family:var(--sans);
+  font-size:.8rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.interval td,.interval th{text-align:center;font-family:var(--mono);font-size:.84rem}
+.interval td.yes{background:#d7e6f6;color:#12395f;font-weight:700}
+.interval td.no{background:#f4f5f6;color:#b0b7bf}
+.interval td.pick{background:#fbe3c6;color:#6b3505;font-weight:800;border-color:#d99a4e}
+.callout-inline{background:#f7f9fb;border:1px dashed var(--line);border-radius:6px;padding:10px 14px;margin:14px 0;font-family:var(--sans);font-size:.9rem}
+
+@media print{
+  body{background:#fff;font-size:11pt}
+  .cover{background:#fff;color:#000;border-bottom:2px solid #000}
+  .cover h1,.lede,.eyebrow,.cover-meta strong,.cover-meta span{color:#000}
+  .cover-meta div{border-color:#999;background:#fff}
+  .toc{box-shadow:none;margin-top:18px}
+  .box,.card,figure,table{break-inside:avoid}
+  .listing{background:#fff;border-color:#999}
+  .listing pre{color:#000;background:#fff}
+  .listing figcaption{background:#eee;color:#000}
+  a{color:#000;text-decoration:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="cover">
+  <div class="cover-inner">
+    <p class="eyebrow">C Programming &middot; Algorithmic Thinking &middot; Illustrated Study Guide</p>
+    <h1>Five Classic C Exercises</h1>
+    <p class="lede">
+      A structured, diagram-led guide to banded matrix multiplication, the Josephus
+      recurrence, stack-based bracket validation, spiral matrix traversal, and
+      breadth-first tree exploration&mdash;written for students who want to understand
+      not only <em>what</em> the code does, but <em>why</em> it is designed that way.
+    </p>
+    <div class="cover-meta" aria-label="Guide statistics">
+      <div><strong>5</strong><span>Problems</span></div>
+      <div><strong>47</strong><span>Test cases</span></div>
+      <div><strong>5</strong><span>Reference solutions</span></div>
+      <div><strong>C11</strong><span>Language standard</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#how-to-use">How to use this guide</a></li>
+    <li><a href="#foundations">Foundations and working habits</a></li>
+    <li><a href="#p1-banded">Banded matrix multiplication</a></li>
+    <li><a href="#p2-josephus">The Josephus problem</a></li>
+    <li><a href="#p3-parentheses">Balanced parentheses</a></li>
+    <li><a href="#p4-spiral">Spiral matrix traversal</a></li>
+    <li><a href="#p5-tree">Tree exploration</a></li>
+    <li><a href="#test-suite">The test suite</a></li>
+    <li><a href="#study-plan">A study plan</a></li>
+    <li><a href="#appendix">Appendix and reference</a></li>
+  </ol>
+</nav>
+
+<main id="main">
+
+<!-- ============================================================ -->
+<section id="how-to-use">
+  <h2><span class="kicker">Orientation</span>How to use this guide</h2>
+  <p class="lead">
+    This document is a learning companion, not a substitute for practice. Each problem
+    is presented in the same sequence: the task and its constraints, the central idea,
+    a visual design blueprint, a worked trace, a correctness argument, an analysis of
+    complexity and pitfalls, and finally a complete reference implementation.
+  </p>
+
+  <div class="box tip">
+    <p class="label">Recommended study cycle</p>
+    <ol>
+      <li><strong>Read the statement only.</strong> Cover the solution section and restate
+        the problem in your own words. Identify the input, the output, and the exact
+        formatting rules.</li>
+      <li><strong>Attempt a solution for 45&ndash;90 minutes.</strong> Draw the data
+        structure on paper before writing code. Compile early and often with warnings
+        enabled.</li>
+      <li><strong>Compare designs, not just answers.</strong> Read the design blueprint
+        and correctness argument. If your approach differs, ask whether it is also
+        correct and what it costs in time and memory.</li>
+      <li><strong>Run the tests.</strong> Use the supplied suite, then add at least one
+        boundary case of your own. A program that passes the samples is not yet a
+        verified program.</li>
+      <li><strong>Reflect in writing.</strong> Record the bug you found, why it happened,
+        and the smallest input that exposed it. This is how debugging skill becomes
+        transferable.</li>
+    </ol>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <p class="tag">Prerequisites</p>
+      <h3>What you should already know</h3>
+      <p>Variables and arithmetic, <code>if</code>/<code>for</code>/<code>while</code>,
+      functions, one- and two-dimensional arrays, strings, and basic pointer syntax.
+      Familiarity with <code>scanf</code>, <code>printf</code>, and <code>fgets</code>
+      is assumed.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Learning outcomes</p>
+      <h3>What you will practise</h3>
+      <p>Translating a specification into invariants; choosing between simulation and
+      mathematical reduction; using a stack and a queue; reasoning about boundaries;
+      proving termination and correctness; and testing exact textual output.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Assessment</p>
+      <h3>How to judge your own work</h3>
+      <p>A solution is complete when it compiles without warnings, passes every supplied
+      test, survives additional edge cases, and you can explain the correctness argument
+      aloud without reading the code.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Integrity</p>
+      <h3>Use the reference responsibly</h3>
+      <p>Attempt the problem first. When you consult a listing, close it and rewrite the
+      solution from memory. Cite any code you adapt, and never submit work you cannot
+      explain or modify under exam conditions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="foundations">
+  <h2><span class="kicker">Core concepts</span>Foundations and working habits</h2>
+  <p class="lead">
+    The five problems look different, but they rest on a small set of shared ideas.
+    Understanding these ideas explicitly makes each new problem feel like a variation
+    on familiar ground rather than an isolated trick.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <p class="tag">Concept 01</p>
+      <h3>Exact input and output</h3>
+      <p>Competitive and assessment programs are usually compared byte for byte.
+      A trailing space, a missing newline, a stray prompt, or the wrong zero padding is
+      a failure even when the mathematics is correct. Read the output specification as
+      carefully as the algorithm.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Concept 02</p>
+      <h3>Arrays and row-major storage</h3>
+      <p>A two-dimensional array <code>a[N][M]</code> is stored row by row. The valid
+      indices are <code>0 &lt;= i &lt; N</code> and <code>0 &lt;= j &lt; M</code>.
+      Most boundary bugs come from confusing the two dimensions or from using a
+      one-based formula on a zero-based array.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Concept 03</p>
+      <h3>Stacks: last in, first out</h3>
+      <p>A stack supports <em>push</em> and <em>pop</em> at one end. It is the natural
+      model for nested obligations: the most recently opened bracket must be the next
+      one closed. An array plus an integer <code>top</code> is sufficient.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Concept 04</p>
+      <h3>Queues and breadth-first search</h3>
+      <p>A queue is first in, first out. Breadth-first search uses a queue to visit all
+      nodes at distance <em>d</em> before any node at distance <em>d+1</em>. The queue
+      therefore encodes the level structure of a graph or tree.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Concept 05</p>
+      <h3>Loop invariants and induction</h3>
+      <p>An invariant is a statement that is true before and after every iteration.
+      If it holds initially, is preserved by the loop body, and implies the goal when
+      the loop ends, the algorithm is correct. The Josephus recurrence is proved by
+      mathematical induction instead.</p>
+    </div>
+    <div class="card">
+      <p class="tag">Concept 06</p>
+      <h3>Complexity and resource bounds</h3>
+      <p>State both time and memory. A solution that is fast enough for
+      <code>N &lt;= 100</code> may be unusable for <code>N = 10^6</code>. The constraints
+      are part of the problem statement, not decoration.</p>
+    </div>
+  </div>
+
+  <h3>Why output formatting deserves its own habit</h3>
+  <p>
+    The banded-matrix and spiral problems are especially strict. The banded problem
+    requires <code>printf("%04d", value)</code>, whose field width includes the sign:
+    <code>-5</code> becomes <code>-005</code> and <code>-24</code> becomes
+    <code>-024</code>. The spiral problem requires exactly one space <em>between</em>
+    values and no space after the last value. A useful habit is to make the separator
+    conditional on position, as in <code>if (i &gt; 0) putchar(' ');</code>, rather
+    than printing a space after every element and trying to remove the last one later.
+  </p>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; a repeatable workflow</p>
+    <ol>
+      <li><strong>Model the data.</strong> What are the objects, their dimensions, and
+        their valid ranges? Write these down before choosing a structure.</li>
+      <li><strong>State the invariant.</strong> What remains true at the start of every
+        loop iteration? For a stack, it is the set of unmatched openers; for spiral
+        traversal, it is the unvisited rectangle.</li>
+      <li><strong>Handle degeneracy.</strong> Ask what happens when a dimension is one,
+        when a graph has one node, or when a band has zero width.</li>
+      <li><strong>Separate computation from presentation.</strong> Compute the answer in
+        ordinary variables, then format it in one final pass.</li>
+      <li><strong>Verify by trace.</strong> Execute the algorithm by hand on the smallest
+        interesting input and on the sample inputs.</li>
+    </ol>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Habit to avoid</p>
+    <p>
+      Do not debug by adding <code>printf</code> statements to a program whose output is
+      itself being compared. Diagnostic text will be treated as part of the answer.
+      Send diagnostics to <code>stderr</code> (<code>fprintf(stderr, ...)</code>) and
+      remove them before submission, or use a debugger. Similarly, never submit a
+      program that prints prompts such as <code>Enter N:</code>.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="p1-banded">
+  <h2><span class="kicker">Problem 01 &middot; Structured sparsity</span>General Banded Matrix Multiplication</h2>
+  <p class="lead">
+    Multiply two square matrices that are mostly zero, and exploit the known shape of
+    the zeros instead of paying for a full cubic product.
+  </p>
+
+  <dl class="glance">
+    <div><dt>Input</dt><dd><code>N p q r s</code>, then two <code>N &times; N</code> matrices</dd></div>
+    <div><dt>Output</dt><dd>Product, printed with <code>%04d</code></dd></div>
+    <div><dt>Core idea</dt><dd>Intersect the two band ranges for each output cell</dd></div>
+    <div><dt>Cost</dt><dd><code>O(N&sup3;)</code> worst case, <code>O(N&sup2;)</code> memory</dd></div>
+  </dl>
+
+  <h3>Statement</h3>
+  <p>
+    Given two <code>N &times; N</code> matrices <code>A</code> and <code>B</code>,
+    compute <code>C = A &times; B</code>. Both matrices are <em>banded</em>: entries
+    outside a limited band around the main diagonal are zero. Using zero-based indices,
+  </p>
+  <ul>
+    <li><code>A[i][j] = 0</code> whenever <code>i - j &gt; p</code> or
+      <code>j - i &gt; q</code>; equivalently, <code>i - p &lt;= j &lt;= i + q</code>.</li>
+    <li><code>B[i][j] = 0</code> whenever <code>i - j &gt; r</code> or
+      <code>j - i &gt; s</code>; equivalently, <code>i - r &lt;= j &lt;= i + s</code>.</li>
+  </ul>
+  <p>
+    The product is defined by the usual formula
+  </p>
+  <div class="equation">
+    C<sub>ij</sub> = &sum;<sub>k</sub> A<sub>ik</sub> B<sub>kj</sub>
+    &nbsp; for &nbsp; 0 &le; k &le; N&nbsp;&minus;&nbsp;1.
+  </div>
+  <p>
+    Because of the bands, only a contiguous range of <code>k</code> can contribute:
+  </p>
+  <div class="equation">
+    max(0, i&nbsp;&minus;&nbsp;p, j&nbsp;&minus;&nbsp;s)
+    &nbsp;&le;&nbsp; k &nbsp;&le;&nbsp;
+    min(N&nbsp;&minus;&nbsp;1, i&nbsp;+&nbsp;q, j&nbsp;+&nbsp;r).
+  </div>
+  <p>
+    If the lower bound exceeds the upper bound, <code>C[i][j] = 0</code>.
+    The input satisfies <code>1 &lt;= N &lt;= 20</code>,
+    <code>0 &lt;= p, q, r, s &lt; N</code>, and every matrix entry is between
+    <code>-99</code> and <code>99</code>.
+  </p>
+
+  <h4>Output specification</h4>
+  <p>
+    Print exactly <code>N</code> lines of <code>N</code> integers. Each integer is
+    printed with <code>printf("%04d", value)</code>: at least four characters, padded
+    with leading zeros, with the minus sign counted as one character. Consecutive
+    values in a line are separated by one space, with no trailing space. Print no
+    headings, labels, or prompts.
+  </p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Sample input and output (S__36421651.jpg, sample 1)</caption>
+      <thead><tr><th style="width:50%">Input</th><th>Output</th></tr></thead>
+      <tbody><tr>
+        <td><pre class="sample">4 1 1 1 1
+1 2 0 0
+3 4 5 0
+0 6 7 8
+0 0 9 10
+2 1 0 0
+4 3 2 0
+0 5 6 7
+0 0 8 9</pre></td>
+        <td><pre class="sample">0010 0007 0004 0000
+0022 0040 0038 0035
+0024 0053 0118 0121
+0000 0045 0134 0153</pre></td>
+      </tr></tbody>
+    </table>
+  </div>
+
+  <div class="box concept">
+    <p class="label">Concept &middot; sparsity is structure, not absence</p>
+    <p>
+      A zero entry is information. If a matrix is known to be zero outside a band, then
+      every product that would use an outside entry is known to be zero before any
+      arithmetic happens. The algorithmic opportunity is to skip those products
+      entirely, converting a dense cubic loop into a band-limited one. This is the same
+      principle behind sparse matrix formats, banded solvers, and compressed storage in
+      numerical computing.
+    </p>
+  </div>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; intersect the two bands</p>
+    <p>
+      Visualise the band of <code>A</code> as the set of columns reachable from a row,
+      and the band of <code>B</code> as the set of rows that can reach a column. For an
+      output cell <code>(i, j)</code>, a product <code>A[i][k] &middot; B[k][j]</code>
+      survives only where both ranges overlap. Clamp the overlap to the real array
+      bounds <code>[0, N-1]</code>, then sum.
+    </p>
+    <div class="table-wrap">
+      <table class="matrix" aria-label="Illustrative 5 by 5 band of matrix A with lower bandwidth 1 and upper bandwidth 2">
+        <tr><th></th><th>j=0</th><th>j=1</th><th>j=2</th><th>j=3</th><th>j=4</th></tr>
+        <tr><th>i=0</th><td class="on">a</td><td class="on">a</td><td class="on">a</td><td class="off">0</td><td class="off">0</td></tr>
+        <tr><th>i=1</th><td class="on">a</td><td class="on">a</td><td class="on">a</td><td class="on">a</td><td class="off">0</td></tr>
+        <tr><th>i=2</th><td class="off">0</td><td class="on">a</td><td class="on">a</td><td class="on">a</td><td class="on">a</td></tr>
+        <tr><th>i=3</th><td class="off">0</td><td class="off">0</td><td class="on">a</td><td class="on">a</td><td class="on">a</td></tr>
+        <tr><th>i=4</th><td class="off">0</td><td class="off">0</td><td class="off">0</td><td class="on">a</td><td class="on">a</td></tr>
+      </table>
+    </div>
+    <p class="small muted" style="text-align:center">
+      Illustrative band with <code>p = 1</code> (one subdiagonal) and
+      <code>q = 2</code> (two superdiagonals). Cells marked <strong>a</strong> may be
+      non-zero; cells marked <strong>0</strong> are guaranteed zero.
+    </p>
+
+    <h4>Example: which <code>k</code> values contribute to <code>C[1][2]</code>?</h4>
+    <p>
+      In sample 1, <code>p = q = r = s = 1</code>, so for row 1 of <code>A</code>,
+      <code>k</code> ranges over <code>[0, 2]</code>; for column 2 of <code>B</code>,
+      <code>k</code> ranges over <code>[1, 3]</code>. The intersection is
+      <code>{1, 2}</code>.
+    </p>
+    <div class="table-wrap">
+      <table class="interval" aria-label="Interval intersection for C[1][2]">
+        <tr><th>range</th><th>k=0</th><th>k=1</th><th>k=2</th><th>k=3</th></tr>
+        <tr><th>A[1][k] &ne; 0</th><td class="yes">yes</td><td class="yes">yes</td><td class="yes">yes</td><td class="no">no</td></tr>
+        <tr><th>B[k][2] &ne; 0</th><td class="no">no</td><td class="yes">yes</td><td class="yes">yes</td><td class="yes">yes</td></tr>
+        <tr><th>contributes</th><td class="no">&mdash;</td><td class="pick">k=1</td><td class="pick">k=2</td><td class="no">&mdash;</td></tr>
+      </table>
+    </div>
+    <p>
+      Therefore
+      <code>C[1][2] = A[1][1]&middot;B[1][2] + A[1][2]&middot;B[2][2]
+      = 4&middot;2 + 5&middot;6 = 38</code>, printed as <code>0038</code>.
+      A naive loop would have evaluated two guaranteed-zero terms as well.
+    </p>
+  </div>
+
+  <h3>Algorithm</h3>
+  <ol class="steps">
+    <li>Read <code>N, p, q, r, s</code>. Validate the input and return quietly on failure.</li>
+    <li>Read <code>A</code> and <code>B</code> into fixed <code>20 &times; 20</code>
+      arrays. The bounds are part of the contract, so no dynamic allocation is needed.</li>
+    <li>For each output row <code>i</code> and column <code>j</code>, initialise
+      <code>lo = i - p</code> and <code>hi = i + q</code>.</li>
+    <li>Intersect with <code>B</code>&rsquo;s band: <code>lo = max(lo, j - s)</code> and
+      <code>hi = min(hi, j + r)</code>. Clamp <code>lo</code> to <code>0</code> and
+      <code>hi</code> to <code>N - 1</code>.</li>
+    <li>Sum <code>A[i][k] * B[k][j]</code> for <code>lo &lt;= k &lt;= hi</code>. If the
+      range is empty, the cell remains zero.</li>
+    <li>Print the result with the exact separator and padding rules.</li>
+  </ol>
+
+  <div class="box proof">
+    <p class="label">Correctness argument</p>
+    <p>
+      For any <code>k &lt; i - p</code> or <code>k &gt; i + q</code>, the band property
+      of <code>A</code> gives <code>A[i][k] = 0</code>. For any <code>k &lt; j - s</code>
+      or <code>k &gt; j + r</code>, the band property of <code>B</code> gives
+      <code>B[k][j] = 0</code>. Hence every term omitted by the restricted loop is
+      exactly zero, and every term retained lies in the intersection. Clamping removes
+      only indices that do not exist in the arrays. The computed sum therefore equals
+      the full matrix product for every cell <code>(i, j)</code>.
+    </p>
+  </div>
+
+  <div class="box tip">
+    <p class="label">Complexity</p>
+    <p>
+      <strong>Time:</strong> <code>O(N&sup2; + &sum;<sub>i,j</sub> overlap(i,j))</code>.
+      The worst case, when all four bandwidths are <code>N - 1</code>, is
+      <code>O(N&sup3;)</code>; narrow bands make it much cheaper.
+      <strong>Memory:</strong> <code>O(N&sup2;)</code> for the three matrices.
+      With <code>N &lt;= 20</code>, even the worst case is only about 8,000
+      multiply-adds in total, far below any practical limit.
+    </p>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Pitfalls</p>
+    <ul>
+      <li><strong>Zero-based versus one-based bounds.</strong> The rendered formula in
+        the original screenshot may appear to use <code>1</code> and <code>N</code>,
+        but the statement declares zero-based indexing. Use <code>0</code> and
+        <code>N - 1</code>, as the samples require.</li>
+      <li><strong>Signed padding.</strong> <code>%04d</code> counts the sign, so
+        <code>-24</code> prints as <code>-024</code>, not <code>-0024</code>.</li>
+      <li><strong>Trailing spaces.</strong> Print the separator before every element
+        except the first in its row.</li>
+      <li><strong>Overflow.</strong> With <code>|entry| &lt;= 99</code> and
+        <code>N &lt;= 20</code>, the largest magnitude is
+        <code>20 &times; 99 &times; 99 = 196,020</code>, which fits in 32-bit
+        <code>int</code>. If the constraints were larger, a 64-bit accumulator would be
+        required.</li>
+      <li><strong>N = 1.</strong> All bandwidths are zero; the single product must still
+        be printed.</li>
+    </ul>
+  </div>
+
+  <div class="box check">
+    <p class="label">Checkpoint questions</p>
+    <ol>
+      <li>Why is it safe to ignore entries of <code>A</code> and <code>B</code> that lie
+        outside their declared bands, even if the input file happens to contain a
+        non-zero value there?</li>
+      <li>Derive the intersection bounds for a cell on the top edge
+        (<code>i = 0</code>) and explain which terms the clamp removes.</li>
+      <li>How would the memory usage change if only the band were stored rather than
+        the full matrix?</li>
+    </ol>
+  </div>
+
+  <figure class="listing">
+    <figcaption>Listing 1 &middot; banded_matrix_multiplication.c</figcaption>
+    <pre><code>#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    int n, p, q, r, s;
+    int A[20][20] = {0};
+    int B[20][20] = {0};
+    int C[20][20] = {0};
+    int i, j, k;
+
+    if (scanf(&quot;%d %d %d %d %d&quot;, &amp;n, &amp;p, &amp;q, &amp;r, &amp;s) != 5)
+        return 0;
+
+    for (i = 0; i &lt; n; i++)
+        for (j = 0; j &lt; n; j++)
+            if (scanf(&quot;%d&quot;, &amp;A[i][j]) != 1)
+                return 0;
+
+    for (i = 0; i &lt; n; i++)
+        for (j = 0; j &lt; n; j++)
+            if (scanf(&quot;%d&quot;, &amp;B[i][j]) != 1)
+                return 0;
+
+    /* C[i][j] = sum over k of A[i][k]*B[k][j].
+     * A[i][k] is non-zero only for i-p &lt;= k &lt;= i+q,
+     * B[k][j] is non-zero only for j-s &lt;= k &lt;= j+r.
+     * Intersect those ranges with [0, n-1]. */
+    for (i = 0; i &lt; n; i++) {
+        for (j = 0; j &lt; n; j++) {
+            int lo = i - p;
+            int hi = i + q;
+
+            if (j - s &gt; lo)
+                lo = j - s;
+            if (j + r &lt; hi)
+                hi = j + r;
+            if (lo &lt; 0)
+                lo = 0;
+            if (hi &gt; n - 1)
+                hi = n - 1;
+
+            C[i][j] = 0;
+            for (k = lo; k &lt;= hi; k++)
+                C[i][j] += A[i][k] * B[k][j];
+        }
+    }
+
+    for (i = 0; i &lt; n; i++) {
+        for (j = 0; j &lt; n; j++) {
+            if (j &gt; 0)
+                putchar(&#x27; &#x27;);
+            printf(&quot;%04d&quot;, C[i][j]);
+        }
+        putchar(&#x27;\n&#x27;);
+    }
+
+    return 0;
+}
+</code></pre>
+  </figure>
+</section>
+
+<!-- ============================================================ -->
+<section id="p2-josephus">
+  <h2><span class="kicker">Problem 02 &middot; Mathematical reduction</span>The Josephus Problem</h2>
+  <p class="lead">
+    A circular elimination process with a simple recurrence hiding underneath it: do not
+    simulate the circle if you can renumber it.
+  </p>
+
+  <dl class="glance">
+    <div><dt>Input</dt><dd>Two integers <code>N K</code></dd></div>
+    <div><dt>Output</dt><dd>Survivor&rsquo;s 1-based number</dd></div>
+    <div><dt>Core idea</dt><dd>Renumber after each elimination</dd></div>
+    <div><dt>Cost</dt><dd><code>O(N)</code> time, <code>O(1)</code> memory</dd></div>
+  </dl>
+
+  <h3>Statement</h3>
+  <p>
+    <code>N</code> people stand in a circle, numbered <code>1</code> to <code>N</code>
+    clockwise. Counting starts at person 1. Every <code>K</code>-th person is eliminated,
+    and counting resumes at the next remaining person, again from 1. The process
+    continues until one person remains. Print that person&rsquo;s number.
+  </p>
+  <p>
+    The constraints are <code>1 &lt;= N &lt;= 1000</code> and
+    <code>1 &lt;= K &lt;= 1000</code>.
+  </p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Samples (S__36421652.jpg)</caption>
+      <thead><tr><th>Input</th><th>Output</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td><code>7 3</code></td><td><code>4</code></td><td>Seven people, every third eliminated</td></tr>
+        <tr><td><code>5 2</code></td><td><code>3</code></td><td>Five people, every second eliminated</td></tr>
+        <tr><td><code>10 1</code></td><td><code>10</code></td><td>Elimination in order; the last person survives</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box concept">
+    <p class="label">Concept &middot; renumbering as a problem-solving move</p>
+    <p>
+      After the first elimination, the remaining people still form a circle of the same
+      kind, just smaller. If we renumber them starting from the person where counting
+      resumes, the smaller circle is an independent copy of the original problem with
+      parameter <code>n - 1</code>. The only work left is to translate a position in the
+      smaller numbering back into the original numbering. This is the essence of a
+      recurrence: solve a smaller instance, then undo the relabelling.
+    </p>
+  </div>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; the circle and the shift</p>
+    <div class="figure-row">
+      <div>
+        <svg viewBox="0 0 400 400" role="img" aria-labelledby="josephusCircleTitle">
+          <title id="josephusCircleTitle">Seven numbered people arranged in a circle; person 4 is the survivor when every third person is eliminated.</title>
+          <circle cx="200" cy="200" r="140" fill="none" stroke="#c9d3de" stroke-width="2" stroke-dasharray="7 7"/>
+          <circle cx="200" cy="60" r="24" fill="#1f3a5f"/>
+          <text x="200" y="66" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">1</text>
+          <circle cx="310" cy="113" r="24" fill="#1f3a5f"/>
+          <text x="310" y="119" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">2</text>
+          <circle cx="337" cy="231" r="24" fill="#1f3a5f"/>
+          <text x="337" y="237" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">3</text>
+          <circle cx="261" cy="326" r="26" fill="#175f49" stroke="#0f4635" stroke-width="3"/>
+          <text x="261" y="332" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">4</text>
+          <circle cx="139" cy="326" r="24" fill="#1f3a5f"/>
+          <text x="139" y="332" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">5</text>
+          <circle cx="63" cy="231" r="24" fill="#1f3a5f"/>
+          <text x="63" y="237" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">6</text>
+          <circle cx="90" cy="113" r="24" fill="#1f3a5f"/>
+          <text x="90" y="119" text-anchor="middle" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">7</text>
+          <text x="200" y="196" text-anchor="middle" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="1">N = 7, K = 3</text>
+          <text x="200" y="216" text-anchor="middle" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="12">counting starts at 1</text>
+        </svg>
+      </div>
+      <div>
+        <ul class="legend">
+          <li class="out">Eliminated first: person 3</li>
+          <li class="out">Then 6, 2, 7, 5, 1</li>
+          <li class="win">Survivor: person 4</li>
+        </ul>
+        <p class="small muted" style="margin-top:14px">
+          Each elimination restarts the count at the next remaining person. The circle
+          shrinks by one, but the rule never changes.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Deriving the recurrence</h3>
+  <p>
+    Let <code>J(n)</code> be the zero-based position of the survivor among
+    <code>n</code> people when counting starts at position 0. For one person,
+    <code>J(1) = 0</code>. With <code>n</code> people, the first eliminated person is at
+    position <code>(K - 1) mod n</code>. Counting resumes at the next person, so if we
+    relabel that person as position 0, the remaining circle has <code>n - 1</code> people.
+    By the induction hypothesis, the survivor has position <code>J(n - 1)</code> in the
+    relabelled circle. To recover the original position, add <code>K</code> (the length
+    of the shift) and reduce modulo <code>n</code>:
+  </p>
+  <div class="equation">
+    J(n) = (J(n&minus;1) + K) &nbsp;mod&nbsp; n,
+    &nbsp;&nbsp; <span class="small">J(1) = 0</span>.
+  </div>
+  <p>
+    The final answer is <code>J(N) + 1</code> because the problem numbers people from 1.
+  </p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Relabelling example: remove person 3 from <code>N = 7</code></caption>
+      <thead><tr><th>New 0-based position</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+      <tbody>
+        <tr><th>Original person</th><td>4</td><td>5</td><td>6</td><td>7</td><td>1</td><td>2</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    A survivor at new position 0 is person 4 in the original circle. Adding
+    <code>K = 3</code> to the new position and reducing modulo the original size
+    performs exactly this translation.
+  </p>
+
+  <h3>Algorithm</h3>
+  <ol class="steps">
+    <li>Read <code>N</code> and <code>K</code>.</li>
+    <li>Set <code>survivor = 0</code>, the base case for one person.</li>
+    <li>For <code>i = 2</code> up to <code>N</code>:
+      <code>survivor = (survivor + K) % i</code>.</li>
+    <li>Print <code>survivor + 1</code>.</li>
+  </ol>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Trace for <code>N = 7, K = 3</code></caption>
+      <thead><tr><th>Circle size <code>i</code></th><th>Computation</th><th><code>J(i)</code></th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>base case</td><td>0</td></tr>
+        <tr><td>2</td><td>(0 + 3) mod 2</td><td>1</td></tr>
+        <tr><td>3</td><td>(1 + 3) mod 3</td><td>1</td></tr>
+        <tr><td>4</td><td>(1 + 3) mod 4</td><td>0</td></tr>
+        <tr><td>5</td><td>(0 + 3) mod 5</td><td>3</td></tr>
+        <tr><td>6</td><td>(3 + 3) mod 6</td><td>0</td></tr>
+        <tr><td>7</td><td>(0 + 3) mod 7</td><td>3</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <code>J(7) = 3</code> in zero-based indexing, so the printed answer is
+    <code>4</code>.
+  </p>
+
+  <div class="box proof">
+    <p class="label">Correctness argument &middot; induction</p>
+    <p>
+      <strong>Base case.</strong> For <code>n = 1</code>, the only person is at position
+      0, so <code>J(1) = 0</code>.
+    </p>
+    <p>
+      <strong>Inductive step.</strong> Assume the recurrence gives the survivor for
+      <code>n - 1</code> people. In a circle of <code>n</code> people, the first
+      elimination removes position <code>(K - 1) mod n</code>. Renumber the remaining
+      people from 0 starting at the next survivor candidate. This is a circle of
+      <code>n - 1</code> people obeying the same rule, so its survivor is at position
+      <code>J(n - 1)</code> in the new numbering. The new position 0 corresponds to
+      original position <code>K mod n</code>; therefore the original position is
+      <code>(J(n - 1) + K) mod n</code>. This is exactly the recurrence.
+    </p>
+    <p>
+      By induction, the loop computes <code>J(N)</code>, and adding one converts the
+      zero-based position to the problem&rsquo;s one-based person number.
+    </p>
+  </div>
+
+  <div class="box tip">
+    <p class="label">Complexity</p>
+    <p>
+      <strong>Time:</strong> <code>O(N)</code> &mdash; at most 999 iterations.
+      <strong>Memory:</strong> <code>O(1)</code>. A direct circular-array simulation
+      would take <code>O(NK)</code> time and <code>O(N)</code> memory; at the stated
+      limits that is still feasible, but the recurrence is shorter, allocation-free,
+      and illustrates a reusable mathematical technique.
+    </p>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Pitfalls</p>
+    <ul>
+      <li><strong>Confusing 0-based and 1-based positions.</strong> Do the recurrence in
+        zero-based indexing, then add one exactly once, at the end.</li>
+      <li><strong>Forgetting the modulo.</strong> <code>K</code> may exceed the current
+        circle size, so the shift must always be reduced modulo <code>i</code>.</li>
+      <li><strong>Off-by-one in the base case.</strong> Starting from
+        <code>survivor = 0</code> and looping from <code>i = 2</code> is correct;
+        starting the loop at <code>i = 1</code> or initialising to 1 produces the wrong
+        answer.</li>
+      <li><strong>N = 1.</strong> The loop body never executes and the answer is 1.</li>
+      <li><strong>K = 0.</strong> The constraints exclude it. A modulo by zero would be
+        undefined, so input validation or a documented precondition is appropriate in
+        general-purpose code.</li>
+    </ul>
+  </div>
+
+  <div class="box check">
+    <p class="label">Checkpoint questions</p>
+    <ol>
+      <li>Why does relabelling the circle not change the structure of the problem?</li>
+      <li>For <code>K = 1</code>, explain both the simulation outcome and why the
+        recurrence produces <code>N</code>.</li>
+      <li>Explain why <code>J(n)</code> can decrease when <code>n</code> increases.
+        Give an example from the trace table.</li>
+    </ol>
+  </div>
+
+  <figure class="listing">
+    <figcaption>Listing 2 &middot; josephus_problem.c</figcaption>
+    <pre><code>#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    int n, k;
+    int survivor = 0; /* 0-based position of the survivor for 1 person */
+    int i;
+
+    if (scanf(&quot;%d %d&quot;, &amp;n, &amp;k) != 2)
+        return 0;
+
+    /* J(1) = 0, J(i) = (J(i-1) + k) % i  (0-based) */
+    for (i = 2; i &lt;= n; i++)
+        survivor = (survivor + k) % i;
+
+    printf(&quot;%d\n&quot;, survivor + 1); /* convert back to 1-based */
+
+    return 0;
+}
+</code></pre>
+  </figure>
+</section>
+
+<!-- ============================================================ -->
+<section id="p3-parentheses">
+  <h2><span class="kicker">Problem 03 &middot; LIFO discipline</span>Balanced Parentheses</h2>
+  <p class="lead">
+    Nesting is a last-in, first-out property. A stack turns that observation into a
+    linear-time decision procedure for strings of round, square, and curly brackets.
+  </p>
+
+  <dl class="glance">
+    <div><dt>Input</dt><dd>One bracket string of length 1&ndash;1000</dd></div>
+    <div><dt>Output</dt><dd><code>Valid</code> or <code>Invalid</code></dd></div>
+    <div><dt>Core idea</dt><dd>Push openers; closers must match the top</dd></div>
+    <div><dt>Cost</dt><dd><code>O(L)</code> time and <code>O(L)</code> memory</dd></div>
+  </dl>
+
+  <h3>Statement</h3>
+  <p>
+    A sequence of brackets is balanced when every opening bracket has a corresponding
+    closing bracket of the same type, and every closing bracket closes the most recently
+    opened bracket that is still open. The input is a single non-empty line of length
+    between 1 and 1000 containing only <code>(</code>, <code>)</code>, <code>[</code>,
+    <code>]</code>, <code>{</code>, and <code>}</code>, with no spaces.
+  </p>
+  <p>
+    Print <code>Valid</code> if the sequence is balanced, otherwise print
+    <code>Invalid</code>. Print nothing else.
+  </p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Samples (S__36421653.jpg)</caption>
+      <thead><tr><th>Input</th><th>Output</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td><code>{[()()]}</code></td><td><code>Valid</code></td><td>Properly nested groups</td></tr>
+        <tr><td><code>{[(])}</code></td><td><code>Invalid</code></td><td>A square bracket would have to close over a round one</td></tr>
+        <tr><td><code>(([]){})</code></td><td><code>Valid</code></td><td>Two balanced groups side by side</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box concept">
+    <p class="label">Concept &middot; the stack as a record of unresolved obligations</p>
+    <p>
+      When an opening bracket is read, it creates an obligation that must be satisfied
+      later. The most recent obligation must be satisfied first, because brackets cannot
+      cross. The stack stores exactly those pending obligations, from oldest at the
+      bottom to newest at the top. A closing bracket is legal only if it discharges the
+      obligation on top; otherwise the nesting is either crossed or unmatched.
+    </p>
+  </div>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; push, match, pop</p>
+    <div class="table-wrap">
+      <table class="table-compact">
+        <caption>Trace of a valid input: <code>{[()()]}</code></caption>
+        <thead><tr><th>Character</th><th>Action</th><th>Stack after (top at right)</th></tr></thead>
+        <tbody>
+          <tr><td><code>{</code></td><td>push</td><td><code>{</code></td></tr>
+          <tr><td><code>[</code></td><td>push</td><td><code>{[</code></td></tr>
+          <tr><td><code>(</code></td><td>push</td><td><code>{[(</code></td></tr>
+          <tr><td><code>)</code></td><td>top is <code>(</code>; pop</td><td><code>{[</code></td></tr>
+          <tr><td><code>(</code></td><td>push</td><td><code>{[(</code></td></tr>
+          <tr><td><code>)</code></td><td>top is <code>(</code>; pop</td><td><code>{[</code></td></tr>
+          <tr><td><code>]</code></td><td>top is <code>[</code>; pop</td><td><code>{</code></td></tr>
+          <tr><td><code>}</code></td><td>top is <code>{</code>; pop</td><td><em>empty</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The stack ends empty, so the sequence is <strong>Valid</strong>.</p>
+
+    <div class="compare">
+      <div class="bad">
+        <h4>Mismatched type: <code>{[(])}</code></h4>
+        <p>
+          After reading <code>{</code>, <code>[</code>, <code>(</code>, the next
+          character is <code>]</code>. The top of the stack is <code>(</code>, not
+          <code>[</code>, so the closer cannot be matched. The sequence is
+          <strong>Invalid</strong>.
+        </p>
+      </div>
+      <div class="bad">
+        <h4>Closer without an opener: <code>)(</code></h4>
+        <p>
+          The first character is already a closer and the stack is empty. No opening
+          obligation exists, so the sequence is <strong>Invalid</strong>. Counting one
+          of each type would incorrectly accept it.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Algorithm</h3>
+  <ol class="steps">
+    <li>Read one line with <code>fgets</code> into a buffer of size
+      <code>MAXLEN + 2</code>, enough for 1000 characters, the newline, and the
+      terminator.</li>
+    <li>Scan characters until <code>'\0'</code>, <code>'\n'</code>, or
+      <code>'\r'</code>.</li>
+    <li>For <code>(</code>, <code>[</code>, or <code>{</code>, push the character and
+      increment <code>top</code>.</li>
+    <li>For a closing bracket, compute the required opener. If the stack is empty or its
+      top differs, set <code>ok = 0</code> and stop. Otherwise decrement
+      <code>top</code>.</li>
+    <li>For any other character, set <code>ok = 0</code> and stop. The input contract
+      excludes such characters, but rejecting them is safer than silently ignoring
+      them.</li>
+    <li>After the scan, if <code>top != 0</code>, some opener was never closed; set
+      <code>ok = 0</code>.</li>
+    <li>Print <code>Valid</code> if <code>ok</code> is still 1, otherwise
+      <code>Invalid</code>.</li>
+  </ol>
+
+  <div class="box proof">
+    <p class="label">Correctness argument &middot; stack invariant</p>
+    <p>
+      At every point during the scan, the stack contains exactly the open brackets that
+      have been read but not yet closed, ordered from oldest at the bottom to newest at
+      the top. This is true initially (empty stack) and is preserved by each action:
+      an opener is added at the top, and a legal closer removes the top because the
+      top is precisely the most recent unresolved opener.
+    </p>
+    <p>
+      If a closer does not match the top, the bracket that must be closed most recently
+      is of a different type, so the sequence cannot be balanced; stopping is correct.
+      If a closer arrives on an empty stack, there is no open obligation for it, so the
+      sequence is unbalanced. At the end, a non-empty stack means at least one opener
+      was never closed. Conversely, if the scan completes with an empty stack and no
+      mismatch, every opener was matched in the correct order, so the sequence is
+      balanced. These cases are exhaustive.
+    </p>
+  </div>
+
+  <div class="box tip">
+    <p class="label">Complexity</p>
+    <p>
+      <strong>Time:</strong> <code>O(L)</code>, because each character is examined once
+      and each bracket is pushed and popped at most once.
+      <strong>Memory:</strong> <code>O(L)</code> for the stack, with
+      <code>L &lt;= 1000</code>. The fixed array <code>char stack[1001]</code> is
+      sufficient and avoids dynamic allocation.
+    </p>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Pitfalls</p>
+    <ul>
+      <li><strong>Counting is not enough.</strong> <code>)(</code> contains one opener
+        and one closer but is invalid; <code>{[(])}</code> has matching counts but
+        crosses types. Only order-aware matching works.</li>
+      <li><strong>Line endings.</strong> If the input uses Windows line endings, stop the
+        scan at <code>'\r'</code> as well as <code>'\n'</code>; otherwise the carriage
+        return may be treated as an unexpected character.</li>
+      <li><strong>Buffer size.</strong> A 1000-character line needs 1002 bytes including
+        the newline and terminator. A buffer of exactly 1000 would truncate the line.</li>
+      <li><strong>Early termination.</strong> Once a mismatch is found, no later
+        character can repair the prefix, so stopping is safe.</li>
+      <li><strong>Unexpected characters.</strong> The contract says only brackets
+        appear; nevertheless, treating anything else as invalid prevents silent
+        acceptance of malformed input.</li>
+    </ul>
+  </div>
+
+  <div class="box check">
+    <p class="label">Checkpoint questions</p>
+    <ol>
+      <li>Why can a correctly balanced sequence never require more than
+        <code>L/2</code> stacked openers?</li>
+      <li>Modify the algorithm conceptually to report the index of the first offending
+        character. What extra state is needed?</li>
+      <li>What would change if the input could contain several independent lines?</li>
+    </ol>
+  </div>
+
+  <figure class="listing">
+    <figcaption>Listing 3 &middot; balanced_parentheses.c</figcaption>
+    <pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define MAXLEN 1000
+
+int main(void)
+{
+    char line[MAXLEN + 2];
+    char stack[MAXLEN + 1];
+    int top = 0;
+    int ok = 1;
+    int i;
+
+    if (fgets(line, sizeof line, stdin) == NULL)
+        return 0;
+
+    for (i = 0; line[i] != &#x27;\0&#x27; &amp;&amp; line[i] != &#x27;\n&#x27; &amp;&amp; line[i] != &#x27;\r&#x27;; i++) {
+        char c = line[i];
+
+        if (c == &#x27;(&#x27; || c == &#x27;[&#x27; || c == &#x27;{&#x27;) {
+            stack[top++] = c;
+        } else if (c == &#x27;)&#x27; || c == &#x27;]&#x27; || c == &#x27;}&#x27;) {
+            char want = (c == &#x27;)&#x27;) ? &#x27;(&#x27; : (c == &#x27;]&#x27;) ? &#x27;[&#x27; : &#x27;{&#x27;;
+
+            if (top == 0 || stack[top - 1] != want) {
+                ok = 0;
+                break;
+            }
+            top--;
+        } else {
+            /* Unexpected character: not part of a valid sequence. */
+            ok = 0;
+            break;
+        }
+    }
+
+    if (top != 0)
+        ok = 0;
+
+    printf(&quot;%s\n&quot;, ok ? &quot;Valid&quot; : &quot;Invalid&quot;);
+
+    return 0;
+}
+</code></pre>
+  </figure>
+</section>
+
+<!-- ============================================================ -->
+<section id="p4-spiral">
+  <h2><span class="kicker">Problem 04 &middot; Boundary simulation</span>Spiral Matrix Traversal</h2>
+  <p class="lead">
+    Peel the matrix like an onion. Four moving boundaries describe the unvisited region,
+    and four sweeps print its outer layer in clockwise order.
+  </p>
+
+  <dl class="glance">
+    <div><dt>Input</dt><dd><code>N M</code>, then an <code>N &times; M</code> matrix</dd></div>
+    <div><dt>Output</dt><dd>All elements in clockwise spiral order</dd></div>
+    <div><dt>Core idea</dt><dd>Shrink <code>top</code>, <code>right</code>, <code>bottom</code>, <code>left</code></dd></div>
+    <div><dt>Cost</dt><dd><code>O(N&middot;M)</code> time, <code>O(N&middot;M)</code> input storage</dd></div>
+  </dl>
+
+  <h3>Statement</h3>
+  <p>
+    Read an <code>N &times; M</code> integer matrix. Starting at the top-left corner,
+    move right first and continue inward in a clockwise spiral until every element has
+    been printed exactly once. The constraints are
+    <code>1 &lt;= N, M &lt;= 30</code>, and every entry is between
+    <code>-1000</code> and <code>1000</code>.
+  </p>
+  <p>
+    Print one line containing all <code>N &times; M</code> elements separated by a single
+    space, with no trailing space.
+  </p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Samples (S__36421654.jpg)</caption>
+      <thead><tr><th style="width:50%">Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><pre class="sample">3 3
+1 2 3
+4 5 6
+7 8 9</pre></td>
+          <td><pre class="sample">1 2 3 6 9 8 7 4 5</pre></td>
+        </tr>
+        <tr>
+          <td><pre class="sample">3 4
+1 2 3 4
+5 6 7 8
+9 10 11 12</pre></td>
+          <td><pre class="sample">1 2 3 4 8 12 11 10 9 5 6 7</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box concept">
+    <p class="label">Concept &middot; invariants over coordinates</p>
+    <p>
+      Instead of tracking the current direction and turning at visited cells, maintain
+      the rectangle of cells that have not yet been printed. This invariant is compact,
+      easy to reason about, and independent of the matrix content. Each sweep prints one
+      side of the rectangle and moves that side inward, so the unvisited region remains
+      a rectangle after every step.
+    </p>
+  </div>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; four sweeps, one shrinking rectangle</p>
+    <p>
+      The figure below shows sample 2. The large number in each cell is the visit order;
+      the small <code>a=</code> value is the matrix entry. Blue cells belong to the outer
+      layer; orange cells are the inner layer.
+    </p>
+    <div class="table-wrap">
+      <table class="matrix spiral" aria-label="Visit order and matrix values for the 3 by 4 sample">
+        <tr><th></th><th>col 0</th><th>col 1</th><th>col 2</th><th>col 3</th></tr>
+        <tr>
+          <th>row 0</th>
+          <td class="l1"><span class="ord">1</span><span class="val">a=1</span></td>
+          <td class="l1"><span class="ord">2</span><span class="val">a=2</span></td>
+          <td class="l1"><span class="ord">3</span><span class="val">a=3</span></td>
+          <td class="l1"><span class="ord">4</span><span class="val">a=4</span></td>
+        </tr>
+        <tr>
+          <th>row 1</th>
+          <td class="l1"><span class="ord">10</span><span class="val">a=5</span></td>
+          <td class="l2"><span class="ord">11</span><span class="val">a=6</span></td>
+          <td class="l2"><span class="ord">12</span><span class="val">a=7</span></td>
+          <td class="l1"><span class="ord">5</span><span class="val">a=8</span></td>
+        </tr>
+        <tr>
+          <th>row 2</th>
+          <td class="l1"><span class="ord">9</span><span class="val">a=9</span></td>
+          <td class="l1"><span class="ord">8</span><span class="val">a=10</span></td>
+          <td class="l1"><span class="ord">7</span><span class="val">a=11</span></td>
+          <td class="l1"><span class="ord">6</span><span class="val">a=12</span></td>
+        </tr>
+      </table>
+    </div>
+    <p class="small muted" style="text-align:center">
+      Sample 2 as a spiral: the outer ring contributes visit orders 1&ndash;10, then the
+      inner 2-cell row contributes 11&ndash;12.
+    </p>
+
+    <div class="table-wrap">
+      <table class="table-compact">
+        <caption>Boundary state during sample 2</caption>
+        <thead><tr><th>Step</th><th>Cells printed</th><th>Values</th><th>Boundary change</th></tr></thead>
+        <tbody>
+          <tr><td>Initial</td><td>&mdash;</td><td>&mdash;</td><td><code>t=0, b=2, l=0, r=3</code></td></tr>
+          <tr><td>Top sweep &rarr;</td><td><code>(0,0)..(0,3)</code></td><td>1 2 3 4</td><td><code>t=1</code></td></tr>
+          <tr><td>Right sweep &darr;</td><td><code>(1,3),(2,3)</code></td><td>8 12</td><td><code>r=2</code></td></tr>
+          <tr><td>Bottom sweep &larr;</td><td><code>(2,2),(2,1),(2,0)</code></td><td>11 10 9</td><td><code>b=1</code></td></tr>
+          <tr><td>Left sweep &uarr;</td><td><code>(1,0)</code></td><td>5</td><td><code>l=1</code></td></tr>
+          <tr><td>Top sweep &rarr;</td><td><code>(1,1),(1,2)</code></td><td>6 7</td><td><code>t=2</code>; stop</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Algorithm</h3>
+  <ol class="steps">
+    <li>Read <code>N</code> and <code>M</code>, then the matrix.</li>
+    <li>Set <code>top = 0</code>, <code>bottom = N - 1</code>, <code>left = 0</code>,
+      <code>right = M - 1</code>.</li>
+    <li>While <code>top &lt;= bottom</code> and <code>left &lt;= right</code>:</li>
+    <li>Print <code>a[top][left..right]</code>; increment <code>top</code>.</li>
+    <li>Print <code>a[top..bottom][right]</code>; decrement <code>right</code>.</li>
+    <li><strong>If <code>top &lt;= bottom</code>,</strong> print
+      <code>a[bottom][right..left]</code>; decrement <code>bottom</code>.</li>
+    <li><strong>If <code>left &lt;= right</code>,</strong> print
+      <code>a[bottom..top][left]</code>; increment <code>left</code>.</li>
+    <li>Print a newline after the loop.</li>
+  </ol>
+
+  <div class="box warning">
+    <p class="label">Why the two guards are essential</p>
+    <p>
+      Consider a single remaining row (<code>top == bottom</code>). The top sweep already
+      prints that row from left to right. Without a guard, the bottom sweep would print
+      the same row from right to left, duplicating every element. The symmetric problem
+      occurs for a single remaining column: the right sweep already printed it, and the
+      left sweep would print it again. The conditions <code>top &lt;= bottom</code> and
+      <code>left &lt;= right</code> check whether the layer still has a distinct opposite
+      side before printing it. Tests with <code>N = 1</code> or <code>M = 1</code> exist
+      precisely to catch this bug.
+    </p>
+  </div>
+
+  <div class="box proof">
+    <p class="label">Correctness argument &middot; rectangle invariant</p>
+    <p>
+      At the start of every iteration, the rectangle
+      <code>[top..bottom] &times; [left..right]</code> is exactly the set of unprinted
+      cells. Initially this is the whole matrix. The four sweeps print its outer layer in
+      clockwise order and then shrink the corresponding boundary, so the remaining
+      unprinted cells form the smaller rectangle for the next iteration. The guards
+      ensure that a sweep is skipped when the layer has collapsed to a single row or
+      column, so no cell is printed twice. Each iteration prints at least one cell and the
+      rectangle strictly shrinks, so the loop terminates. When the rectangle is empty,
+      every cell has been printed exactly once, in the required clockwise order.
+    </p>
+  </div>
+
+  <div class="box tip">
+    <p class="label">Complexity</p>
+    <p>
+      <strong>Time:</strong> <code>O(N &middot; M)</code>, because each cell is printed
+      exactly once. <strong>Memory:</strong> <code>O(N &middot; M)</code> for the matrix;
+      the traversal itself uses <code>O(1)</code> additional state. With at most
+      <code>30 &times; 30 = 900</code> cells, a fixed array
+      <code>int a[30][30]</code> is sufficient.
+    </p>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Pitfalls</p>
+    <ul>
+      <li><strong>Duplicating the last row or column.</strong> This is the classic spiral
+        bug; always guard the third and fourth sweeps.</li>
+      <li><strong>Updating a boundary too early.</strong> The right sweep must start one
+        row below the just-printed top row, and the bottom sweep must end one column left
+        of the just-printed right column. The order of the increments matters.</li>
+      <li><strong>Trailing space.</strong> A helper that prints a space before every
+        element except the first is safer than trimming afterwards.</li>
+      <li><strong>Negative values.</strong> Do not special-case them; <code>%d</code>
+        already prints the minus sign correctly.</li>
+      <li><strong>Non-square matrices.</strong> Do not use <code>N</code> for both
+        dimensions. Rectangular cases such as 2&times;5 and 5&times;3 expose swapped
+        bounds immediately.</li>
+    </ul>
+  </div>
+
+  <div class="box check">
+    <p class="label">Checkpoint questions</p>
+    <ol>
+      <li>Trace the boundary values for a 1&times;5 matrix and identify exactly which
+        guard prevents duplicate output.</li>
+      <li>How would the algorithm change for a counter-clockwise spiral starting at the
+        top-left and moving down first?</li>
+      <li>Why is the number of loop iterations approximately
+        <code>ceil(min(N, M) / 2)</code>?</li>
+    </ol>
+  </div>
+
+  <figure class="listing">
+    <figcaption>Listing 4 &middot; spiral_matrix_traversal.c</figcaption>
+    <pre><code>#include &lt;stdio.h&gt;
+
+#define MAX 30
+
+static void emit(int value, int *first)
+{
+    if (!*first)
+        putchar(&#x27; &#x27;);
+    printf(&quot;%d&quot;, value);
+    *first = 0;
+}
+
+int main(void)
+{
+    int n, m;
+    int a[MAX][MAX];
+    int top = 0, bottom, left = 0, right;
+    int first = 1;
+    int i, j;
+
+    if (scanf(&quot;%d %d&quot;, &amp;n, &amp;m) != 2)
+        return 0;
+    if (n &lt; 1 || n &gt; MAX || m &lt; 1 || m &gt; MAX)
+        return 0;
+
+    for (i = 0; i &lt; n; i++)
+        for (j = 0; j &lt; m; j++)
+            if (scanf(&quot;%d&quot;, &amp;a[i][j]) != 1)
+                return 0;
+
+    bottom = n - 1;
+    right = m - 1;
+
+    while (top &lt;= bottom &amp;&amp; left &lt;= right) {
+        /* Left to right across the top row. */
+        for (j = left; j &lt;= right; j++)
+            emit(a[top][j], &amp;first);
+        top++;
+
+        /* Top to bottom down the right column. */
+        for (i = top; i &lt;= bottom; i++)
+            emit(a[i][right], &amp;first);
+        right--;
+
+        /* Right to left across the bottom row, if it is still unvisited. */
+        if (top &lt;= bottom) {
+            for (j = right; j &gt;= left; j--)
+                emit(a[bottom][j], &amp;first);
+            bottom--;
+        }
+
+        /* Bottom to top up the left column, if it is still unvisited. */
+        if (left &lt;= right) {
+            for (i = bottom; i &gt;= top; i--)
+                emit(a[i][left], &amp;first);
+            left++;
+        }
+    }
+
+    putchar(&#x27;\n&#x27;);
+
+    return 0;
+}
+</code></pre>
+  </figure>
+</section>
+
+<!-- ============================================================ -->
+<section id="p5-tree">
+  <h2><span class="kicker">Problem 05 &middot; Hierarchy and distance</span>Tree Exploration</h2>
+  <p class="lead">
+    Explore a tree level by level, and impose a deterministic order inside each level.
+    Breadth-first search supplies the levels; sorting supplies the tie-break.
+  </p>
+
+  <dl class="glance">
+    <div><dt>Input</dt><dd><code>N</code>, then <code>N-1</code> edges <code>{a,b}</code></dd></div>
+    <div><dt>Output</dt><dd>Visit order, separated by spaces</dd></div>
+    <div><dt>Core idea</dt><dd>BFS distances, then sort by <code>(distance, id)</code></dd></div>
+    <div><dt>Cost</dt><dd><code>O(N&sup2;)</code> with an adjacency matrix</dd></div>
+  </dl>
+
+  <h3>Statement</h3>
+  <p>
+    You are given a tree with <code>N</code> nodes numbered <code>1</code> to
+    <code>N</code>. Starting from node 1, visit the tree according to these rules:
+  </p>
+  <ol>
+    <li>visit node 1 first;</li>
+    <li>explore all directly connected, unvisited nodes before exploring nodes farther
+      away;</li>
+    <li>nodes at the same distance from node 1 must be visited in ascending numerical
+      order;</li>
+    <li>each node must be visited exactly once.</li>
+  </ol>
+  <p>
+    The first line contains <code>N</code> (<code>1 &lt;= N &lt;= 100</code>). Each of the
+    next <code>N - 1</code> lines contains one edge written exactly as
+    <code>{a,b}</code> with no spaces. Edges are undirected, may appear in any order,
+    and either endpoint may appear first. The input is guaranteed to form a valid tree.
+  </p>
+  <p>
+    Print one line with the visited node numbers in order, separated by a single space,
+    and print no other text.
+  </p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Samples (S__36421655.jpg)</caption>
+      <thead><tr><th style="width:50%">Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><pre class="sample">5
+{1,2}
+{1,3}
+{2,4}
+{2,5}</pre></td>
+          <td><pre class="sample">1 2 3 4 5</pre></td>
+        </tr>
+        <tr>
+          <td><pre class="sample">6
+{1,4}
+{4,2}
+{4,6}
+{2,3}
+{3,5}</pre></td>
+          <td><pre class="sample">1 4 2 6 3 5</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box concept">
+    <p class="label">Concept &middot; distance is the primary key, identity is the tie-break</p>
+    <p>
+      Rule 2 is exactly breadth-first search: all nodes at distance <code>d</code> are
+      visited before any node at distance <code>d + 1</code>. Rule 3 adds a second,
+      independent ordering requirement <em>within</em> each level. Separating these two
+      concerns is the key design decision. BFS answers &ldquo;how far?&rdquo;; a sort
+      answers &ldquo;in what order within the same distance?&rdquo; Trying to satisfy both
+      by cleverly ordering adjacency lists is fragile and, as shown below, incorrect.
+    </p>
+  </div>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; levels of the sample tree</p>
+    <div class="figure-row">
+      <div>
+        <svg viewBox="0 0 760 470" role="img" aria-labelledby="treeTitle">
+          <title id="treeTitle">Sample 2 tree: node 1 leads to node 4; node 4 leads to nodes 2 and 6; node 2 leads to node 3; node 3 leads to node 5.</title>
+          <rect x="88" y="28" width="620" height="54" rx="8" fill="#eef4fa"/>
+          <rect x="88" y="123" width="620" height="54" rx="8" fill="#f7f9fb"/>
+          <rect x="88" y="218" width="620" height="54" rx="8" fill="#eef4fa"/>
+          <rect x="88" y="313" width="620" height="54" rx="8" fill="#f7f9fb"/>
+          <rect x="88" y="408" width="620" height="54" rx="8" fill="#eef4fa"/>
+          <text x="40" y="60" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">d = 0</text>
+          <text x="40" y="155" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">d = 1</text>
+          <text x="40" y="250" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">d = 2</text>
+          <text x="40" y="345" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">d = 3</text>
+          <text x="40" y="440" fill="#5c6b7a" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700">d = 4</text>
+          <line x1="380" y1="55" x2="380" y2="150" stroke="#8b9bad" stroke-width="3"/>
+          <line x1="380" y1="150" x2="260" y2="245" stroke="#8b9bad" stroke-width="3"/>
+          <line x1="380" y1="150" x2="500" y2="245" stroke="#8b9bad" stroke-width="3"/>
+          <line x1="260" y1="245" x2="260" y2="340" stroke="#8b9bad" stroke-width="3"/>
+          <line x1="260" y1="340" x2="260" y2="435" stroke="#8b9bad" stroke-width="3"/>
+          <circle cx="380" cy="55" r="24" fill="#1f3a5f"/>
+          <text x="380" y="61" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">1</text>
+          <circle cx="380" cy="150" r="24" fill="#1f3a5f"/>
+          <text x="380" y="156" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">4</text>
+          <circle cx="260" cy="245" r="24" fill="#1f3a5f"/>
+          <text x="260" y="251" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">2</text>
+          <circle cx="500" cy="245" r="24" fill="#1f3a5f"/>
+          <text x="500" y="251" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">6</text>
+          <circle cx="260" cy="340" r="24" fill="#1f3a5f"/>
+          <text x="260" y="346" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">3</text>
+          <circle cx="260" cy="435" r="24" fill="#1f3a5f"/>
+          <text x="260" y="441" text-anchor="middle" fill="#fff" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700">5</text>
+        </svg>
+      </div>
+      <div>
+        <div class="table-wrap" style="margin-top:0">
+          <table class="table-compact">
+            <caption>Node data for sample 2</caption>
+            <thead><tr><th>Node</th><th>Distance</th><th>Visit order</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>0</td><td>1</td></tr>
+              <tr><td>4</td><td>1</td><td>2</td></tr>
+              <tr><td>2</td><td>2</td><td>3</td></tr>
+              <tr><td>6</td><td>2</td><td>4</td></tr>
+              <tr><td>3</td><td>3</td><td>5</td></tr>
+              <tr><td>5</td><td>4</td><td>6</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p>
+      Sorting by <code>(distance, node number)</code> produces
+      <code>1, 4, 2, 6, 3, 5</code>. Notice that node 6 has a larger number than node 3
+      and lies at a smaller distance, so distance must be the primary key; node 2 and
+      node 6 share a distance, so their numbers decide the order.
+    </p>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Why sorting each adjacency list is not sufficient</p>
+    <div class="compare">
+      <div class="bad">
+        <h4>Per-parent BFS: wrong</h4>
+        <p class="small">
+          Edges: <code>{1,2}, {1,3}, {2,5}, {3,4}</code>. Level 1 is
+          <code>2, 3</code>. Node 2 is processed first and enqueues 5; node 3 then
+          enqueues 4. Discovery order within level 2 is therefore 5, then 4.
+        </p>
+        <p><span class="chip bad">1 2 3 5 4</span></p>
+      </div>
+      <div class="good">
+        <h4>Level-global ordering: correct</h4>
+        <p class="small">
+          Both 4 and 5 are at distance 2, so the rule requires ascending numerical
+          order regardless of which parent discovered them first.
+        </p>
+        <p><span class="chip ok">1 2 3 4 5</span></p>
+      </div>
+    </div>
+    <p>
+      A smaller-numbered parent can have a larger-numbered child. Sorting adjacency lists
+      only orders siblings under the same parent; it cannot order nodes across different
+      parents. The reference solution therefore decouples BFS from the final ordering.
+      Test cases 6 and 10 are designed to expose this exact mistake.
+    </p>
+  </div>
+
+  <h3>Algorithm</h3>
+  <ol class="steps">
+    <li>Read <code>N</code>.</li>
+    <li>For each of the <code>N - 1</code> edges, parse the format
+      <code>{a,b}</code> with <code>scanf(" { %d , %d }", &amp;a, &amp;b)</code> and set
+      both directions in an adjacency matrix. The leading space in the format skips the
+      newline left by the previous read.</li>
+    <li>Initialise every distance to <code>-1</code>; set <code>dist[1] = 0</code> and
+      enqueue node 1.</li>
+    <li>Run standard BFS: dequeue <code>u</code>, and for each unvisited neighbour
+      <code>v</code>, set <code>dist[v] = dist[u] + 1</code> and enqueue <code>v</code>.</li>
+    <li>Collect all nodes with a non-negative distance into an order array.</li>
+    <li>Insertion-sort the array by the key <code>(dist[v], v)</code> ascending.</li>
+    <li>Print the nodes separated by single spaces.</li>
+  </ol>
+
+  <div class="box proof">
+    <p class="label">Correctness argument</p>
+    <p>
+      Breadth-first search computes, for every reachable node, the minimum number of
+      edges from the source. In a tree every node is reachable from node 1, so
+      <code>dist[v]</code> is exactly the distance defined in the statement. Sorting by
+      <code>dist</code> therefore places nodes in non-decreasing distance, satisfying
+      rule 2 and the first part of rule 1. The secondary key <code>v</code> orders all
+      nodes that share a distance in ascending numerical order, satisfying rule 3. The
+      order array contains each node exactly once, satisfying rule 4. Hence the printed
+      sequence is precisely the required traversal.
+    </p>
+  </div>
+
+  <div class="box tip">
+    <p class="label">Complexity</p>
+    <p>
+      <strong>Time:</strong> BFS over an adjacency matrix is <code>O(N&sup2;)</code>, and
+      the insertion sort is <code>O(N&sup2;)</code> in the worst case, so the total is
+      <code>O(N&sup2;)</code>. With <code>N &lt;= 100</code> this is at most about 10,000
+      basic operations. <strong>Memory:</strong> <code>O(N&sup2;)</code> for the
+      <code>101 &times; 101</code> adjacency matrix plus <code>O(N)</code> for the queue,
+      distances, and order. An adjacency-list representation would reduce the BFS to
+      <code>O(N)</code> and the sort to <code>O(N log N)</code>, with
+      <code>O(N)</code> memory.
+    </p>
+  </div>
+
+  <div class="box warning">
+    <p class="label">Pitfalls</p>
+    <ul>
+      <li><strong>Parsing the braces.</strong> <code>%d</code> alone will not skip a
+        literal <code>{</code>. The format string must contain the braces and the comma,
+        and the leading space lets <code>scanf</code> skip the newline between edges.</li>
+      <li><strong>Printing in discovery order.</strong> Discovery order is not necessarily
+        level-sorted across parents. Sort by <code>(distance, id)</code> or collect each
+        level explicitly and sort it.</li>
+      <li><strong>One-based numbering.</strong> Node <code>N</code> is valid, so arrays
+        need size <code>N + 1</code>. Off-by-one errors here are common when converting
+        from zero-based array thinking.</li>
+      <li><strong>N = 1.</strong> No edge lines follow. The BFS visits node 1 and the
+        output is <code>1</code>.</li>
+      <li><strong>Unreachable nodes.</strong> The input is guaranteed to be a tree, so
+        this cannot occur. A defensive implementation skips nodes whose distance remains
+        <code>-1</code>, as the reference does.</li>
+      <li><strong>Trailing space.</strong> Print spaces only between values.</li>
+    </ul>
+  </div>
+
+  <div class="box check">
+    <p class="label">Checkpoint questions</p>
+    <ol>
+      <li>Construct a tree in which two nodes at the same distance are discovered in the
+        opposite order from their numerical order.</li>
+      <li>Why does a tree require exactly <code>N - 1</code> edges, and why does that
+        guarantee connectivity in this problem?</li>
+      <li>How would you output the nodes grouped by level on separate lines without
+        changing the BFS?</li>
+    </ol>
+  </div>
+
+  <figure class="listing">
+    <figcaption>Listing 5 &middot; tree_exploration.c</figcaption>
+    <pre><code>#include &lt;stdio.h&gt;
+
+#define MAXN 100
+
+int main(void)
+{
+    int n;
+    int adj[MAXN + 1][MAXN + 1] = {0};
+    int dist[MAXN + 1];
+    int queue[MAXN];
+    int head = 0, tail = 0;
+    int order[MAXN];
+    int count = 0;
+    int a, b;
+    int i, j;
+
+    if (scanf(&quot;%d&quot;, &amp;n) != 1)
+        return 0;
+    if (n &lt; 1 || n &gt; MAXN)
+        return 0;
+
+    for (i = 0; i &lt; n - 1; i++) {
+        if (scanf(&quot; { %d , %d }&quot;, &amp;a, &amp;b) != 2)
+            return 0;
+        if (a &lt; 1 || a &gt; n || b &lt; 1 || b &gt; n)
+            return 0;
+        adj[a][b] = 1;
+        adj[b][a] = 1;
+    }
+
+    for (i = 1; i &lt;= n; i++)
+        dist[i] = -1;
+
+    /* Breadth-first search from node 1 records each node&#x27;s distance. */
+    dist[1] = 0;
+    queue[tail++] = 1;
+    while (head &lt; tail) {
+        int u = queue[head++];
+
+        for (j = 1; j &lt;= n; j++) {
+            if (adj[u][j] &amp;&amp; dist[j] == -1) {
+                dist[j] = dist[u] + 1;
+                queue[tail++] = j;
+            }
+        }
+    }
+
+    /* Visit order is by distance, then by node number within a distance. */
+    for (i = 1; i &lt;= n; i++)
+        if (dist[i] != -1)
+            order[count++] = i;
+
+    for (i = 1; i &lt; count; i++) {
+        int key = order[i];
+
+        j = i - 1;
+        while (j &gt;= 0 &amp;&amp;
+               (dist[order[j]] &gt; dist[key] ||
+                (dist[order[j]] == dist[key] &amp;&amp; order[j] &gt; key))) {
+            order[j + 1] = order[j];
+            j--;
+        }
+        order[j + 1] = key;
+    }
+
+    for (i = 0; i &lt; count; i++) {
+        if (i &gt; 0)
+            putchar(&#x27; &#x27;);
+        printf(&quot;%d&quot;, order[i]);
+    }
+    putchar(&#x27;\n&#x27;);
+
+    return 0;
+}
+</code></pre>
+  </figure>
+</section>
+
+<!-- ============================================================ -->
+<section id="test-suite">
+  <h2><span class="kicker">Verification</span>The test suite</h2>
+  <p class="lead">
+    The repository ships 47 executable cases across five suites. Each case is a pair of
+    files: <code>testN.in</code> is fed to standard input, and <code>testN.out</code> is
+    the exact expected standard output. Verification is byte-for-byte.
+  </p>
+
+  <h3>Running the harness</h3>
+  <div class="sample">./run_tests.sh</div>
+  <p>
+    The script compiles every solution with <code>gcc -std=c11 -Wall -Wextra -O2</code>,
+    builds the binaries in a temporary directory, runs each <code>*.in</code> file, and
+    compares the result with the matching <code>*.out</code> using <code>diff -u</code>.
+    It prints <code>PASS</code> or <code>FAIL</code> for each case, then a final summary,
+    and exits non-zero if anything failed. Override the compiler with
+    <code>CC=clang ./run_tests.sh</code> if desired.
+  </p>
+
+  <div class="box design">
+    <p class="label">Design blueprint &middot; how a case flows through the harness</p>
+    <ol class="steps">
+      <li><strong>Select source and suite.</strong> For example,
+        <code>run_suite spiral spiral_matrix_traversal.c tests/spiral</code>.</li>
+      <li><strong>Compile once.</strong> A build failure stops the suite immediately and
+        is reported as <code>BUILD FAILED</code>.</li>
+      <li><strong>Enumerate inputs.</strong> Every <code>tests/&lt;suite&gt;/*.in</code>
+        file becomes one case; the expected file is the same name with
+        <code>.out</code>.</li>
+      <li><strong>Execute with redirection.</strong> The binary reads the input file and
+        writes to a temporary actual-output file.</li>
+      <li><strong>Compare.</strong> <code>diff -u</code> prints the first differing
+        lines; any difference marks the case and the whole run as failed.</li>
+      <li><strong>Summarise.</strong> <code>ALL TESTS PASSED</code> appears only when
+        every suite builds and every case matches.</li>
+    </ol>
+  </div>
+
+  <h3>Suite 1 &middot; Banded matrix multiplication</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption><code>tests/banded/</code> &mdash; 8 cases</caption>
+      <thead><tr><th>Case</th><th>Input / condition</th><th>Expected result and purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>test1</code></td><td>Sample 1: <code>N=4</code>, all bands 1</td><td>4&times;4 product starting <code>0010 0007 0004 0000</code>; core band logic</td></tr>
+        <tr><td><code>test2</code></td><td>Sample 2: <code>N=3, p=0, q=1, r=1, s=0</code></td><td><code>0020 0016 0000</code> etc.; upper and lower bidiagonal structure</td></tr>
+        <tr><td><code>test3</code></td><td><code>N=5</code>, negative entries, <code>p=1,q=2,r=2,s=1</code></td><td>Mixed signs including <code>-024</code>, <code>-004</code>; signed padding and clamping</td></tr>
+        <tr><td><code>test4</code></td><td><code>N=1</code>, <code>A=-5</code>, <code>B=7</code></td><td><code>-035</code>; minimum size</td></tr>
+        <tr><td><code>test5</code></td><td><code>N=20</code>, every entry 99, full bands</td><td>All 400 cells equal <code>196020</code>; maximum size and integer range</td></tr>
+        <tr><td><code>test6</code></td><td><code>N=4</code>, all bandwidths 0</td><td>Diagonal <code>0014</code>, <code>-018</code>, <code>-020</code>, <code>-020</code>; pure diagonal product</td></tr>
+        <tr><td><code>test7</code></td><td><code>N=20, p=2,q=3,r=1,s=4</code>, mixed signs</td><td>Large banded product; clamps at all four boundaries</td></tr>
+        <tr><td><code>test8</code></td><td><code>N=12, p=0,q=11,r=11,s=0</code></td><td>Triangular product; one-sided maximum bandwidth</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Suite 2 &middot; Josephus problem</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption><code>tests/josephus/</code> &mdash; 8 cases</caption>
+      <thead><tr><th>Case</th><th>Input</th><th>Output and purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>test1</code></td><td><code>7 3</code></td><td><code>4</code>; sample 1</td></tr>
+        <tr><td><code>test2</code></td><td><code>5 2</code></td><td><code>3</code>; sample 2</td></tr>
+        <tr><td><code>test3</code></td><td><code>10 1</code></td><td><code>10</code>; sample 3, <code>K = 1</code></td></tr>
+        <tr><td><code>test4</code></td><td><code>1 1</code></td><td><code>1</code>; minimum <code>N</code></td></tr>
+        <tr><td><code>test5</code></td><td><code>1 1000</code></td><td><code>1</code>; <code>N = 1</code> with large <code>K</code></td></tr>
+        <tr><td><code>test6</code></td><td><code>1000 1000</code></td><td><code>609</code>; both values at maximum</td></tr>
+        <tr><td><code>test7</code></td><td><code>1000 1</code></td><td><code>1000</code>; elimination in numerical order</td></tr>
+        <tr><td><code>test8</code></td><td><code>1000 2</code></td><td><code>977</code>; large even-step case</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Suite 3 &middot; Balanced parentheses</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption><code>tests/parentheses/</code> &mdash; 11 cases</caption>
+      <thead><tr><th>Case</th><th>Input</th><th>Output and purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>test1</code></td><td><code>{[()()]}</code></td><td><code>Valid</code>; sample 1, all three types</td></tr>
+        <tr><td><code>test2</code></td><td><code>{[(])}</code></td><td><code>Invalid</code>; sample 2, crossed types</td></tr>
+        <tr><td><code>test3</code></td><td><code>(([]){})</code></td><td><code>Valid</code>; sample 3, adjacent groups</td></tr>
+        <tr><td><code>test4</code></td><td><code>()</code></td><td><code>Valid</code>; shortest valid sequence</td></tr>
+        <tr><td><code>test5</code></td><td><code>)(</code></td><td><code>Invalid</code>; closer with empty stack</td></tr>
+        <tr><td><code>test6</code></td><td><code>((((</code></td><td><code>Invalid</code>; unclosed openers remain</td></tr>
+        <tr><td><code>test7</code></td><td><code>]</code></td><td><code>Invalid</code>; single closer</td></tr>
+        <tr><td><code>test8</code></td><td>500 <code>(</code> then 500 <code>)</code></td><td><code>Valid</code>; exactly 1000 characters, depth 500</td></tr>
+        <tr><td><code>test9</code></td><td>500 <code>(</code>, 499 <code>)</code></td><td><code>Invalid</code>; maximum-ish length, one unclosed</td></tr>
+        <tr><td><code>test10</code></td><td>996-character mixed nesting</td><td><code>Valid</code>; deep alternation of all three pairs</td></tr>
+        <tr><td><code>test11</code></td><td><code>{</code></td><td><code>Invalid</code>; single opener</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Suite 4 &middot; Spiral matrix traversal</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption><code>tests/spiral/</code> &mdash; 10 cases</caption>
+      <thead><tr><th>Case</th><th>Input / shape</th><th>Expected output and purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>test1</code></td><td>3&times;3, values 1&ndash;9</td><td><code>1 2 3 6 9 8 7 4 5</code>; sample 1, odd square</td></tr>
+        <tr><td><code>test2</code></td><td>3&times;4, values 1&ndash;12</td><td><code>1 2 3 4 8 12 11 10 9 5 6 7</code>; sample 2, rectangle</td></tr>
+        <tr><td><code>test3</code></td><td>1&times;1, value 5</td><td><code>5</code>; minimum size</td></tr>
+        <tr><td><code>test4</code></td><td>1&times;5, values 1&ndash;5</td><td><code>1 2 3 4 5</code>; single row</td></tr>
+        <tr><td><code>test5</code></td><td>5&times;1, values 1&ndash;5</td><td><code>1 2 3 4 5</code>; single column</td></tr>
+        <tr><td><code>test6</code></td><td>2&times;2, values 1&ndash;4</td><td><code>1 2 4 3</code>; even dimensions</td></tr>
+        <tr><td><code>test7</code></td><td>2&times;3, negative values</td><td><code>-1 -2 -3 -6 -5 -4</code>; negative printing</td></tr>
+        <tr><td><code>test8</code></td><td>4&times;4, values 1&ndash;16</td><td><code>1 2 3 4 8 12 16 15 14 13 9 5 6 7 11 10</code>; two layers</td></tr>
+        <tr><td><code>test9</code></td><td>2&times;5, values 1&ndash;10</td><td><code>1 2 3 4 5 10 9 8 7 6</code>; wide rectangle</td></tr>
+        <tr><td><code>test10</code></td><td>5&times;3, values 1&ndash;15</td><td><code>1 2 3 6 9 12 15 14 13 10 7 4 5 8 11</code>; tall rectangle</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Suite 5 &middot; Tree exploration</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption><code>tests/tree/</code> &mdash; 10 cases</caption>
+      <thead><tr><th>Case</th><th>Input / condition</th><th>Expected output and purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>test1</code></td><td>5 nodes; sample 1</td><td><code>1 2 3 4 5</code>; two levels</td></tr>
+        <tr><td><code>test2</code></td><td>6 nodes; sample 2</td><td><code>1 4 2 6 3 5</code>; non-monotone parent and child numbers</td></tr>
+        <tr><td><code>test3</code></td><td><code>N=1</code>, no edges</td><td><code>1</code>; minimum tree</td></tr>
+        <tr><td><code>test4</code></td><td>Chain <code>{5,4}&hellip;{2,1}</code></td><td><code>1 2 3 4 5</code>; reversed endpoints and edge order</td></tr>
+        <tr><td><code>test5</code></td><td>Star centred at 1</td><td><code>1 2 3 4 5 6</code>; wide first level</td></tr>
+        <tr><td><code>test6</code></td><td><code>1-2, 1-3, 2-5, 3-4</code></td><td><code>1 2 3 4 5</code>; global level sort, not per parent</td></tr>
+        <tr><td><code>test7</code></td><td>7 nodes, shuffled edges</td><td><code>1 2 3 7 4 5 6</code>; input-order independence</td></tr>
+        <tr><td><code>test8</code></td><td><code>N=2</code>, edge <code>{2,1}</code></td><td><code>1 2</code>; smallest non-trivial tree</td></tr>
+        <tr><td><code>test9</code></td><td>Chain 6&ndash;5&ndash;4&ndash;3&ndash;2&ndash;1</td><td><code>1 2 3 4 5 6</code>; deep chain, reversed input</td></tr>
+        <tr><td><code>test10</code></td><td><code>1-2, 1-5, 2-4, 5-3</code></td><td><code>1 2 5 3 4</code>; tie-break across different parents</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box tip">
+    <p class="label">Reading the suite as a specification</p>
+    <p>
+      The cases are not arbitrary. Together they encode the boundary conditions that a
+      correct solution must satisfy: minimum sizes, degenerate dimensions, maximum
+      sizes, signed values, reversed input order, and deliberately adversarial
+      orderings. When adding a new case, ask which invariant it probes and whether a
+      plausible wrong solution would fail it. A test that no incorrect program could fail
+      adds confidence but little diagnostic value.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="study-plan">
+  <h2><span class="kicker">Pedagogy</span>A study plan</h2>
+  <p class="lead">
+    The five problems are arranged so that each introduces a technique used again later:
+    structured sparsity, mathematical reduction, stack invariants, boundary simulation,
+    and graph traversal. The following plan is a suggestion, not a deadline.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <caption>Suggested three-week progression</caption>
+      <thead><tr><th>Stage</th><th>Focus</th><th>Concrete work</th><th>Evidence of understanding</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Week 1</strong></td>
+          <td>Arrays, bands, and recurrences</td>
+          <td>Problems 1 and 2; foundations cards 1, 2, and 5</td>
+          <td>Can derive the intersection bounds and the Josephus recurrence without notes</td>
+        </tr>
+        <tr>
+          <td><strong>Week 2</strong></td>
+          <td>Stacks and boundary invariants</td>
+          <td>Problems 3 and 4; foundations cards 3 and 6</td>
+          <td>Can explain why the two spiral guards are necessary and why counting brackets is insufficient</td>
+        </tr>
+        <tr>
+          <td><strong>Week 3</strong></td>
+          <td>Graph traversal and verification</td>
+          <td>Problem 5, the full test suite, and the exercises below</td>
+          <td>Can construct an adversarial test for each solution and justify its complexity</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>A disciplined debugging protocol</h3>
+  <ol class="steps">
+    <li><strong>Reproduce the smallest failure.</strong> Reduce the input while the
+      program still fails. A three-element case is easier to reason about than a
+      900-element matrix.</li>
+    <li><strong>Predict before you print.</strong> Write down what each variable should
+      contain after the next iteration. Then compare with reality. This distinguishes a
+      misunderstanding from a typo.</li>
+    <li><strong>Inspect the invariant.</strong> If the stack, boundary, or distance array
+      violates its intended meaning, the bug is usually one line before the symptom.</li>
+    <li><strong>Enable diagnostics.</strong> Compile with
+      <code>-fsanitize=address,undefined</code> to catch out-of-bounds access, signed
+      overflow, and other silent errors:
+      <div class="sample">gcc -std=c11 -Wall -Wextra -g -fsanitize=address,undefined \
+    -o /tmp/prog solution.c</div></li>
+    <li><strong>Compare against a slow oracle.</strong> For small inputs, write a brute
+      force version and compare outputs. Agreement on hundreds of random small cases is
+      strong evidence of correctness.</li>
+    <li><strong>Remove diagnostics and re-run the exact suite.</strong> A fix is not
+      complete until the original failing case and all previous cases pass.</li>
+  </ol>
+
+  <h3>Common errors and their remedies</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <thead><tr><th>Symptom</th><th>Likely cause</th><th>Remedy</th></tr></thead>
+      <tbody>
+        <tr><td>Output differs only by a trailing space</td><td>Separator printed after every element</td><td>Print the space <em>before</em> every element except the first</td></tr>
+        <tr><td><code>-24</code> printed where <code>-024</code> is expected</td><td><code>%04d</code> counts the sign</td><td>Keep the specified format; do not widen it manually</td></tr>
+        <tr><td>Spiral duplicates the last row or column</td><td>Missing guards after shrinking</td><td>Check <code>top &lt;= bottom</code> and <code>left &lt;= right</code> before the third and fourth sweeps</td></tr>
+        <tr><td>Tree output looks almost sorted</td><td>Sorting adjacency lists instead of whole levels</td><td>Sort by the pair <code>(distance, node number)</code></td></tr>
+        <tr><td>Josephus answer off by one</td><td>Mixing zero-based recurrence with one-based labels</td><td>Compute in zero-based form, add one only at print time</td></tr>
+        <tr><td>Parentheses accepted incorrectly</td><td>Counting brackets instead of matching them</td><td>Use a stack and compare types, not totals</td></tr>
+        <tr><td>Crash or garbage on the last row</td><td>Loop bound uses <code>&lt;=</code> with the dimension instead of <code>dimension - 1</code></td><td>Audit every loop bound against the array size</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Exercises</h3>
+  <h4>Consolidation</h4>
+  <ol>
+    <li>Re-implement all five programs from a blank file without consulting the listings.
+      Compare your version with the reference only after it passes the suite.</li>
+    <li>For each program, write down the loop invariant in one sentence. If you cannot,
+      the code is not yet understood.</li>
+    <li>Add one boundary test per suite that is not already present, and explain which
+      wrong implementation it would catch.</li>
+  </ol>
+
+  <h4>Extension</h4>
+  <ol>
+    <li><strong>Banded matrices:</strong> store only the band in a compressed array and
+      recompute the product. Measure the memory saved for
+      <code>N = 20, p = q = 1</code>.</li>
+    <li><strong>Josephus:</strong> implement the circular linked-list simulation and
+      compare its running time with the recurrence for <code>N = K = 1000</code>.</li>
+    <li><strong>Parentheses:</strong> report the index and type of the first error
+      instead of only <code>Invalid</code>. Then extend the program to verify brackets
+      across multiple lines.</li>
+    <li><strong>Spiral:</strong> produce a counter-clockwise spiral, and then a spiral
+      that starts at the centre and expands outward.</li>
+    <li><strong>Tree:</strong> print one line per level, then compute the height and the
+      number of leaves. Finally, replace the adjacency matrix with adjacency lists and
+      preserve the output.</li>
+  </ol>
+
+  <h4>Verification</h4>
+  <ol>
+    <li>Write a brute-force oracle for the banded product and compare it with the
+      band-limited version on random small matrices.</li>
+    <li>Generate random trees, compute the expected order with an independent
+      level-by-level algorithm, and compare.</li>
+    <li>Fuzz the bracket checker with random strings over the six bracket characters and
+      compare against a recursive-descent parser.</li>
+  </ol>
+
+  <h3>Self-assessment rubric</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Level</th><th>Description</th><th>Typical evidence</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Novice</strong></td><td>Produces a program that passes the samples, with guidance</td><td>Can follow the algorithm but cannot yet explain the guards or the recurrence</td></tr>
+        <tr><td><strong>Developing</strong></td><td>Passes most cases; occasional boundary or formatting errors</td><td>Can debug with print statements and identify the failing condition</td></tr>
+        <tr><td><strong>Proficient</strong></td><td>Passes all cases and can state the invariant and complexity</td><td>Writes additional tests and predicts their outcomes before running</td></tr>
+        <tr><td><strong>Advanced</strong></td><td>Can adapt the technique to a new problem and prove correctness</td><td>Provides an independent oracle, analyses trade-offs, and refactors safely</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box check">
+    <p class="label">A final recommendation</p>
+    <p>
+      Keep a short engineering journal. For each problem, record the first design you
+      tried, the first input that failed, the root cause, and the fix. Over five problems
+      this produces a personal catalogue of mistakes that is far more valuable than a
+      folder of finished source files. The goal is not merely to solve these five
+      exercises, but to recognise the same structures in the next fifty.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="appendix">
+  <h2><span class="kicker">Reference</span>Appendix</h2>
+
+  <h3>Complexity summary</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Problem</th><th>Principal technique</th><th>Time</th><th>Extra memory</th><th>Key invariant</th></tr></thead>
+      <tbody>
+        <tr><td>Banded matrix multiplication</td><td>Band intersection</td><td><code>O(N&sup3;)</code> worst; less for narrow bands</td><td><code>O(N&sup2;)</code></td><td>Omitted terms are exactly zero</td></tr>
+        <tr><td>Josephus problem</td><td>Recurrence and renumbering</td><td><code>O(N)</code></td><td><code>O(1)</code></td><td><code>J(n) = (J(n-1)+K) mod n</code></td></tr>
+        <tr><td>Balanced parentheses</td><td>Stack</td><td><code>O(L)</code></td><td><code>O(L)</code></td><td>Stack holds unclosed openers, newest on top</td></tr>
+        <tr><td>Spiral matrix traversal</td><td>Shrinking boundaries</td><td><code>O(N&middot;M)</code></td><td><code>O(1)</code> beyond input</td><td>Boundaries delimit exactly the unprinted rectangle</td></tr>
+        <tr><td>Tree exploration</td><td>BFS plus sorting</td><td><code>O(N&sup2;)</code> with a matrix; <code>O(N log N)</code> with lists</td><td><code>O(N&sup2;)</code> or <code>O(N)</code></td><td>Distance is minimal; equal distances sorted by id</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>File map</h3>
+  <div class="table-wrap">
+    <table class="table-compact">
+      <thead><tr><th>Path</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td><code>README.html</code></td><td>This guide: problems, concepts, solutions, and test documentation</td></tr>
+        <tr><td><code>run_tests.sh</code></td><td>Builds every solution and compares outputs with the expected files</td></tr>
+        <tr><td><code>banded_matrix_multiplication.c</code></td><td>Reference solution for problem 1</td></tr>
+        <tr><td><code>josephus_problem.c</code></td><td>Reference solution for problem 2</td></tr>
+        <tr><td><code>balanced_parentheses.c</code></td><td>Reference solution for problem 3</td></tr>
+        <tr><td><code>spiral_matrix_traversal.c</code></td><td>Reference solution for problem 4</td></tr>
+        <tr><td><code>tree_exploration.c</code></td><td>Reference solution for problem 5</td></tr>
+        <tr><td><code>tests/banded/</code></td><td>8 input/output pairs for problem 1</td></tr>
+        <tr><td><code>tests/josephus/</code></td><td>8 input/output pairs for problem 2</td></tr>
+        <tr><td><code>tests/parentheses/</code></td><td>11 input/output pairs for problem 3</td></tr>
+        <tr><td><code>tests/spiral/</code></td><td>10 input/output pairs for problem 4</td></tr>
+        <tr><td><code>tests/tree/</code></td><td>10 input/output pairs for problem 5</td></tr>
+        <tr><td><code>S__36421651.jpg &hellip; S__36421655.jpg</code></td><td>Original problem statements as supplied</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Command reference</h3>
+  <div class="sample"># Run every suite
+./run_tests.sh
+
+# Use a different compiler
+CC=clang ./run_tests.sh
+
+# Compile one solution with warnings and sanitizers
+gcc -std=c11 -Wall -Wextra -g -fsanitize=address,undefined \
+    -o /tmp/spiral spiral_matrix_traversal.c
+
+# Run one case manually
+/tmp/spiral &lt; tests/spiral/test2.in
+
+# Compare manually (process substitution requires bash)
+diff -u tests/spiral/test2.out &lt;(/tmp/spiral &lt; tests/spiral/test2.in)</div>
+
+  <h3>Glossary</h3>
+  <div class="cards">
+    <div class="card">
+      <h3>Bandwidth</h3>
+      <p>The maximum distance of a non-zero entry from the main diagonal. Lower and
+      upper bandwidths may differ.</p>
+    </div>
+    <div class="card">
+      <h3>Invariant</h3>
+      <p>A property that is true before and after every loop iteration and, together with
+      termination, establishes the result.</p>
+    </div>
+    <div class="card">
+      <h3>Breadth-first search</h3>
+      <p>A traversal that visits all nodes at distance <code>d</code> before any node at
+      distance <code>d + 1</code>, implemented with a queue.</p>
+    </div>
+    <div class="card">
+      <h3>Oracle</h3>
+      <p>An independent, usually slower, implementation used to check a faster solution
+      on small inputs.</p>
+    </div>
+    <div class="card">
+      <h3>Degenerate case</h3>
+      <p>A boundary input in which a general dimension or structure collapses, such as a
+      1&times;1 matrix or a single-node tree.</p>
+    </div>
+    <div class="card">
+      <h3>Byte-for-byte comparison</h3>
+      <p>An exact textual comparison in which whitespace, punctuation, and newlines all
+      matter.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <strong>Five Classic C Exercises</strong> &middot; An illustrated study guide for
+      C-learning students.
+    </div>
+    <div>
+      Reference implementations compile with <code>gcc -std=c11 -Wall -Wextra -O2</code>.
+      Verify with <code>./run_tests.sh</code>.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

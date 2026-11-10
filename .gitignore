@@ -1,0 +1,23 @@
+# Build artifacts
+a.out
+*.o
+*.obj
+*.exe
+*.bin
+*.dSYM/
+*.stackdump
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Local copies of compiled demo programs
+/banded
+/josephus
+/parentheses
+/spiral
+/tree

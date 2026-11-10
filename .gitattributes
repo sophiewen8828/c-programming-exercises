@@ -1,0 +1,13 @@
+# Preserve the exact bytes of test data and scripts across platforms.
+* text=auto
+
+*.c      text eol=lf
+*.h      text eol=lf
+*.sh     text eol=lf
+*.html   text eol=lf
+*.md     text eol=lf
+*.in     text eol=lf
+*.out    text eol=lf
+
+*.jpg    binary
+*.png    binary
