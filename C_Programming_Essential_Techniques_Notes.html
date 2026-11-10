@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C 語言經典習題必要技巧學習重點筆記</title>
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --secondary: #2c5282;
+      --accent: #3182ce;
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --text: #2d3748;
+      --code-bg: #edf2f7;
+      --border: #e2e8f0;
+      --success: #38a169;
+      --warning: #d69e2e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    h2 {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 3px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+    }
+
+    h3 {
+      color: var(--secondary);
+      font-size: 1.15rem;
+      margin: 1.5rem 0 0.7rem;
+    }
+
+    p, li {
+      margin-bottom: 0.6rem;
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    .card {
+      background: #f8fafc;
+      border-left: 4px solid var(--accent);
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .warning {
+      background: #fffbeb;
+      border-left-color: var(--warning);
+    }
+
+    .success {
+      background: #f0fff4;
+      border-left-color: var(--success);
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin: 1rem 0;
+    }
+
+    code {
+      font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+      background: var(--code-bg);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.7rem 1rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      margin-right: 0.3rem;
+      font-weight: 500;
+    }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+
+    .map-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .map-item strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: #718096;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 1rem 0.5rem; }
+      .content { padding: 1.2rem; }
+      header { padding: 1.8rem 1.2rem; }
+      header h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>C 語言經典習題必要技巧<br>學習重點筆記</h1>
+      <p>對應「Five Classic C Programming Exercises」五道經典題目</p>
+    </header>
+
+    <div class="content">
+      <h2>一、前言</h2>
+      <p>本筆記整理解決以下五道經典 C 語言習題時，最核心且反覆出現的技巧、語法與演算法思維：</p>
+      <ol>
+        <li>帶狀矩陣乘法（Banded Matrix Multiplication）</li>
+        <li>約瑟夫問題（Josephus Problem）</li>
+        <li>括號平衡判斷（Balanced Parentheses）</li>
+        <li>螺旋矩陣遍歷（Spiral Matrix Traversal）</li>
+        <li>樹的廣度優先探索（Tree Exploration）</li>
+      </ol>
+      <div class="card">
+        <strong>學習目標：</strong> 不只會寫出能過測資的程式，更能理解「為什麼這樣設計」，並能自行推導正確性與處理邊界情況。
+      </div>
+
+      <h2>二、基礎必備技能</h2>
+      <p>以下是進入這五題前應已熟練的基礎：</p>
+      <ul>
+        <li>變數、算術運算、條件判斷（<code>if</code>）與迴圈（<code>for</code> / <code>while</code>）</li>
+        <li>函式的定義與呼叫</li>
+        <li>一維與二維陣列的宣告、初始化與存取</li>
+        <li>基本指標語法（雖本系列題目較少直接使用）</li>
+        <li><code>scanf</code>、<code>printf</code>、<code>fgets</code>、<code>putchar</code> 的使用</li>
+        <li>編譯時開啟警告：<code>gcc -std=c11 -Wall -Wextra</code></li>
+      </ul>
+
+      <h2>三、精確輸入輸出控制</h2>
+      <p>這是最容易因為「看起來正確卻測不過」而失分的地方。</p>
+
+      <h3>1. 輸入檢查</h3>
+      <pre><code>if (scanf("%d %d", &n, &m) != 2)
+    return 0;</code></pre>
+      <p>務必檢查 <code>scanf</code> 的回傳值，確保成功讀取預期數量的資料。</p>
+
+      <h3>2. 輸出格式嚴格要求</h3>
+      <ul>
+        <li>數字之間只能有<strong>一個空格</strong>，最後一個數字後<strong>不能有空格</strong>。</li>
+        <li>推薦寫法：</li>
+      </ul>
+      <pre><code>for (int i = 0; i &lt; count; i++) {
+    if (i &gt; 0) putchar(' ');
+    printf("%d", arr[i]);
+}
+putchar('\n');</code></pre>
+
+      <h3>3. 特殊格式：%04d</h3>
+      <pre><code>printf("%04d", value);</code></pre>
+      <ul>
+        <li>寬度包含負號：<code>-24</code> 會印成 <code>-024</code>，而不是 <code>-0024</code>。</li>
+        <li>正數會補前導零，例如 <code>38</code> → <code>0038</code>。</li>
+      </ul>
+
+      <h3>4. 讀取一行字串</h3>
+      <pre><code>char line[MAXLEN + 2];
+if (fgets(line, sizeof(line), stdin) == NULL)
+    return 0;
+
+// 處理時跳過 '\n' 與 '\r'
+for (int i = 0; line[i] != '\0' && line[i] != '\n' && line[i] != '\r'; i++) {
+    // ...
+}</code></pre>
+
+      <div class="card warning">
+        <strong>重要禁忌：</strong> 絕對不要印出任何提示訊息（例如 <code>Enter N:</code>），也不要在正式輸出中混入除錯用的 <code>printf</code>。除錯訊息請輸出到 <code>stderr</code>。
+      </div>
+
+      <h2>四、陣列操作與邊界處理</h2>
+      <h3>1. 固定大小陣列</h3>
+      <pre><code>int A[20][20] = {0};   // 全部初始化為 0
+int dist[101];         // 一維陣列</code></pre>
+
+      <h3>2. 邊界夾逼（Clamping）</h3>
+      <pre><code>int lo = i - p;
+int hi = i + q;
+
+if (j - s &gt; lo) lo = j - s;
+if (j + r &lt; hi) hi = j + r;
+if (lo &lt; 0)     lo = 0;
+if (hi &gt; n - 1) hi = n - 1;</code></pre>
+      <p>這是帶狀矩陣乘法中計算有效 <code>k</code> 範圍的核心技巧。</p>
+
+      <h3>3. 0-based 與 1-based 的轉換</h3>
+      <ul>
+        <li>陣列索引通常使用 0-based。</li>
+        <li>題目若要求 1-based 輸出，只在最後轉換一次。</li>
+        <li>圖的節點若編號為 1～N，陣列大小需開到 <code>N+1</code>。</li>
+      </ul>
+
+      <h2>五、堆疊（Stack）模擬</h2>
+      <p>適用於括號匹配、巢狀結構等「後進先出」問題。</p>
+
+      <pre><code>char stack[MAXLEN + 1];
+int top = 0;
+
+// Push
+stack[top++] = c;
+
+// Pop / 檢查匹配
+if (top == 0 || stack[top - 1] != want) {
+    ok = 0;          // 失敗
+} else {
+    top--;           // 成功彈出
+}
+
+// 最終檢查
+if (top != 0) ok = 0;  // 還有未閉合的左括號</code></pre>
+
+      <div class="card">
+        <strong>核心不變量：</strong> 堆疊中保存的是「目前尚未匹配的左括號」，且由底到頂依開啟順序排列。任何右括號都必須與棧頂匹配。
+      </div>
+
+      <h2>六、佇列（Queue）與廣度優先搜尋（BFS）</h2>
+      <pre><code>int queue[MAXN];
+int head = 0, tail = 0;
+int dist[MAXN + 1];
+
+// 初始化
+for (int i = 1; i &lt;= n; i++) dist[i] = -1;
+dist[1] = 0;
+queue[tail++] = 1;
+
+// BFS
+while (head &lt; tail) {
+    int u = queue[head++];
+    for (int v = 1; v &lt;= n; v++) {
+        if (adj[u][v] && dist[v] == -1) {
+            dist[v] = dist[u] + 1;
+            queue[tail++] = v;
+        }
+    }
+}</code></pre>
+
+      <p>重點：</p>
+      <ul>
+        <li>用陣列模擬佇列，<code>head</code> 與 <code>tail</code> 指標即可。</li>
+        <li><code>dist[]</code> 同時扮演「是否造訪過」與「距離」的角色。</li>
+        <li>樹或圖的遍歷順序若有額外要求（例如同層依編號排序），需在 BFS 後再額外排序。</li>
+      </ul>
+
+      <h2>七、邊界模擬（螺旋矩陣核心技巧）</h2>
+      <p>使用四個邊界變數描述「尚未走訪的矩形區域」：</p>
+      <pre><code>int top = 0, bottom = n - 1;
+int left = 0, right = m - 1;
+
+while (top &lt;= bottom && left &lt;= right) {
+    // 1. 上邊：左 → 右
+    for (int j = left; j &lt;= right; j++)
+        emit(a[top][j]);
+    top++;
+
+    // 2. 右邊：上 → 下
+    for (int i = top; i &lt;= bottom; i++)
+        emit(a[i][right]);
+    right--;
+
+    // 3. 下邊：右 → 左（需守衛）
+    if (top &lt;= bottom) {
+        for (int j = right; j &gt;= left; j--)
+            emit(a[bottom][j]);
+        bottom--;
+    }
+
+    // 4. 左邊：下 → 上（需守衛）
+    if (left &lt;= right) {
+        for (int i = bottom; i &gt;= top; i--)
+            emit(a[i][left]);
+        left++;
+    }
+}</code></pre>
+
+      <div class="card warning">
+        <strong>經典陷阱：</strong> 當矩陣退化成單行或單列時，若沒有第三、第四步的守衛條件，會造成重複輸出。務必加上 <code>if (top &lt;= bottom)</code> 與 <code>if (left &lt;= right)</code>。
+      </div>
+
+      <h2>八、數學遞迴與模運算（約瑟夫問題）</h2>
+      <p>避免直接模擬圓形淘汰，改用遞迴關係：</p>
+      <pre><code>int survivor = 0;          // 0-based 位置
+for (int i = 2; i &lt;= n; i++)
+    survivor = (survivor + k) % i;
+
+printf("%d\n", survivor + 1);  // 轉成 1-based</code></pre>
+
+      <p>對應的數學關係：</p>
+      <pre><code>J(1) = 0
+J(n) = (J(n-1) + K) mod n</code></pre>
+
+      <div class="card success">
+        <strong>優點：</strong> 時間複雜度 O(N)、空間 O(1)，且程式極為精簡，不容易出錯。
+      </div>
+
+      <h2>九、圖的表示與特殊輸入解析</h2>
+      <h3>1. 鄰接矩陣</h3>
+      <pre><code>int adj[MAXN + 1][MAXN + 1] = {0};
+adj[a][b] = 1;
+adj[b][a] = 1;   // 無向圖</code></pre>
+
+      <h3>2. 解析特殊格式輸入（例如 {a,b}）</h3>
+      <pre><code>int a, b;
+if (scanf(" { %d , %d }", &a, &b) != 2)
+    return 0;</code></pre>
+      <p>格式字串中的空白可以幫助跳過換行與多餘空白字元。</p>
+
+      <h3>3. 排序（距離優先，編號次之）</h3>
+      <p>可使用插入排序實作：</p>
+      <pre><code>// 依 (dist[v], v) 遞增排序
+for (int i = 1; i &lt; count; i++) {
+    int key = order[i];
+    int j = i - 1;
+    while (j &gt;= 0 &&
+           (dist[order[j]] &gt; dist[key] ||
+            (dist[order[j]] == dist[key] && order[j] &gt; key))) {
+        order[j + 1] = order[j];
+        j--;
+    }
+    order[j + 1] = key;
+}</code></pre>
+
+      <h2>十、五題技巧對應地圖</h2>
+      <div class="map-grid">
+        <div class="map-item">
+          <strong>1. 帶狀矩陣乘法</strong>
+          二維陣列、邊界夾逼、%04d 格式、精確空格控制
+        </div>
+        <div class="map-item">
+          <strong>2. 約瑟夫問題</strong>
+          模運算、0/1-based 轉換、數學遞迴思維
+        </div>
+        <div class="map-item">
+          <strong>3. 括號平衡</strong>
+          陣列模擬堆疊、fgets 讀取、字元匹配
+        </div>
+        <div class="map-item">
+          <strong>4. 螺旋矩陣</strong>
+          四邊界模擬、守衛條件避免重複、非正方形處理
+        </div>
+        <div class="map-item">
+          <strong>5. 樹的探索</strong>
+          鄰接矩陣、陣列佇列 BFS、距離記錄、二次排序
+        </div>
+      </div>
+
+      <h2>十一、常見陷阱與除錯建議</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>症狀</th>
+            <th>可能原因</th>
+            <th>建議解法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>只差在最後多一個空格</td>
+            <td>空格印在每個元素後面</td>
+            <td>改為「非第一個元素前先印空格」</td>
+          </tr>
+          <tr>
+            <td>-24 印成錯誤格式</td>
+            <td>對 %04d 理解錯誤</td>
+            <td>記住負號也佔寬度</td>
+          </tr>
+          <tr>
+            <td>螺旋矩陣重複輸出</td>
+            <td>缺少第三、四邊守衛</td>
+            <td>加上 top ≤ bottom 與 left ≤ right 判斷</td>
+          </tr>
+          <tr>
+            <td>括號判斷錯誤</td>
+            <td>只用計數而未考慮順序</td>
+            <td>必須使用堆疊</td>
+          </tr>
+          <tr>
+            <td>樹遍歷順序錯誤</td>
+            <td>只依發現順序輸出</td>
+            <td>BFS 後依 (距離, 編號) 排序</td>
+          </tr>
+          <tr>
+            <td>N=1 或單行/單列錯誤</td>
+            <td>未處理退化情況</td>
+            <td>務必測試最小邊界</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card">
+        <strong>除錯習慣建議：</strong>
+        <ol>
+          <li>先用最小能重現錯誤的測資進行思考。</li>
+          <li>手動模擬變數變化，預測下一輪結果再比對。</li>
+          <li>編譯時加上 <code>-fsanitize=address,undefined</code> 捕捉越界與未定義行為。</li>
+          <li>對於小規模輸入，可寫暴力版本作為對照（oracle）。</li>
+        </ol>
+      </div>
+
+      <h2>十二、學習建議</h2>
+      <ol>
+        <li><strong>先自己實作</strong>：看完題目後先嘗試 45～90 分鐘，再對照參考解法。</li>
+        <li><strong>比較設計而非只比答案</strong>：思考自己的方法與參考方法在時間、空間、可讀性上的差異。</li>
+        <li><strong>主動製造邊界測資</strong>：N=1、單行、單列、最大規模、負數、特殊格式等都要自己試。</li>
+        <li><strong>記錄錯誤</strong>：把踩過的坑與最小重現輸入寫下來，這是最有效的進步方式。</li>
+        <li><strong>能講清楚正確性</strong>：一個解法真正完成的標準，是你能不看程式碼就向別人解釋「為什麼它是對的」。</li>
+      </ol>
+
+      <div class="card success">
+        <strong>總結：</strong> 這五題看似不同，但背後共用的核心能力其實不多——精確 I/O、陣列邊界、堆疊/佇列模擬、邊界收縮、數學化簡、以及清楚的不變量思維。把這些技巧練熟後，許多其他演算法題目都會變得親切許多。
+      </div>
+    </div>
+
+    <footer>
+      整理自 Five Classic C Programming Exercises 學習重點<br>
+      建議搭配原站完整說明與測試套件一起使用
+    </footer>
+  </div>
+</body>
+</html>
