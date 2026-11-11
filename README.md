@@ -58,6 +58,8 @@ gcc -std=c11 -Wall -Wextra -O2 -o /tmp/spiral spiral_matrix_traversal.c
 .
 ├── README.md                                  # this overview
 ├── README.html                                # illustrated study guide
+├── c-programming-explain.html                 # illustrated study guide (alternate edition)
+├── c-programming-quiz.html                    # interactive practice quiz (problems 1–5)
 ├── index.html                                 # GitHub Pages landing redirect
 ├── C_Programming_Essential_Techniques_Notes.html
 ├── banded_matrix_multiplication.c
@@ -110,6 +112,9 @@ final newline intact.
   complete code listings.
 - [**Traditional Chinese notes**](https://sophiewen8828.github.io/c-programming-exercises/C_Programming_Essential_Techniques_Notes.html) —
   a condensed reference for the techniques used across all five problems.
+- [**Interactive practice quiz**](https://sophiewen8828.github.io/c-programming-exercises/c-programming-quiz.html) —
+  the five problems with sample input/output, copy buttons, and per-problem
+  progress tracking saved in the browser.
 - [**Original problem statements**](S__36421651.jpg) — the five screenshot files
   (`S__36421651.jpg` … `S__36421655.jpg`) are kept in the repository.
 
