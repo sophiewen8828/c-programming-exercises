@@ -69,7 +69,6 @@ gcc -std=c11 -Wall -Wextra -O2 -o /tmp/spiral spiral_matrix_traversal.c
 ├── spiral_matrix_traversal.c
 ├── tree_exploration.c
 ├── run_tests.sh
-├── S__36421651.jpg … S__36421655.jpg          # original problem statements
 └── tests/
     ├── banded/          # 8 cases
     ├── josephus/        # 8 cases
@@ -119,9 +118,6 @@ final newline intact.
 - [**Practice resources and study plan**](https://sophiewen8828.github.io/c-programming-exercises/c-programming-resources.html) —
   curated practice sites, GitHub repositories, courses, Traditional Chinese
   resources, and a four-week plan for improving quickly.
-- [**Original problem statements**](S__36421651.jpg) — the five screenshot files
-  (`S__36421651.jpg` … `S__36421655.jpg`) are kept in the repository.
-
 Both HTML documents are intended to be read through GitHub Pages. The repository
 root link <https://sophiewen8828.github.io/c-programming-exercises/> redirects to
 the illustrated guide via `index.html`.
