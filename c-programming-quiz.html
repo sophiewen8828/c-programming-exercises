@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C Programming Quiz · Problems 1–5</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --ink:#1b2430;
+    --muted:#5b6778;
+    --line:#e2e7f0;
+    --accent:#3b5bdb;
+    --accent-soft:#eef2ff;
+    --green:#0ca678;
+    --green-soft:#e6fcf5;
+    --code-bg:#f8faff;
+    --shadow:0 10px 30px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  code,pre{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:
+      radial-gradient(900px 400px at 15% -10%, rgba(59,91,219,.45), transparent 60%),
+      radial-gradient(700px 350px at 100% 0%, rgba(12,166,120,.35), transparent 55%),
+      #0f172a;
+    color:#f8fafc;
+    padding:56px 0 46px;
+  }
+  .eyebrow{
+    margin:0 0 10px;
+    font-size:.76rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#9db4ff;
+    font-weight:700;
+  }
+  .hero h1{
+    margin:0;
+    font-size:clamp(2rem,4vw,3rem);
+    line-height:1.15;
+    letter-spacing:-.02em;
+  }
+  .lede{
+    margin:14px 0 0;
+    max-width:680px;
+    color:#c9d4e8;
+    font-size:1.02rem;
+  }
+  .progress-card{
+    margin-top:28px;
+    max-width:540px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:14px;
+    padding:15px 18px;
+    backdrop-filter:blur(6px);
+  }
+  .progress-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+    font-size:.85rem;
+    color:#dbe5f7;
+    margin-bottom:9px;
+  }
+  .progress-meta strong{color:#fff}
+  .bar{
+    height:8px;
+    border-radius:999px;
+    background:rgba(255,255,255,.16);
+    overflow:hidden;
+  }
+  #progressBar{
+    height:100%;
+    width:0;
+    border-radius:999px;
+    background:linear-gradient(90deg,#4dabf7,#38d9a9);
+    transition:width .35s ease;
+  }
+  .progress-actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:10px;
+  }
+  .progress-actions span{font-size:.75rem;color:#9fb0cc}
+  .reset{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.22);
+    background:transparent;
+    color:#dbe5f7;
+    border-radius:8px;
+    padding:4px 10px;
+    font:inherit;
+    font-size:.75rem;
+    cursor:pointer;
+  }
+  .reset:hover{background:rgba(255,255,255,.08)}
+
+  /* ---------- Table of contents ---------- */
+  .toc{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:22px 0 0;
+  }
+  .toc a{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#fff;
+    border:1px solid var(--line);
+    color:var(--muted);
+    text-decoration:none;
+    font-size:.8rem;
+    font-weight:600;
+    box-shadow:0 2px 8px rgba(15,23,42,.03);
+    transition:border-color .15s, color .15s, transform .15s;
+  }
+  .toc a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+  .toc b{
+    display:inline-grid;
+    place-items:center;
+    width:20px;height:20px;
+    border-radius:50%;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:.68rem;
+  }
+
+  /* ---------- Problem cards ---------- */
+  .problem{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:28px 30px 30px;
+    margin:24px 0;
+    box-shadow:var(--shadow);
+    scroll-margin-top:24px;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .problem.solved{
+    border-color:#9fe8d4;
+    box-shadow:0 10px 30px rgba(12,166,120,.10);
+  }
+  .problem-head{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--line);
+  }
+  .num{
+    flex:0 0 auto;
+    display:grid;
+    place-items:center;
+    width:52px;height:52px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#3b5bdb,#5c7cfa);
+    color:#fff;
+    font-weight:800;
+    font-size:1.05rem;
+    letter-spacing:.03em;
+    box-shadow:0 6px 16px rgba(59,91,219,.25);
+  }
+  .problem.solved .num{background:linear-gradient(135deg,#0ca678,#20c997);box-shadow:0 6px 16px rgba(12,166,120,.25)}
+  .titles{min-width:0}
+  .titles h2{
+    margin:0 0 7px;
+    font-size:clamp(1.18rem,2.2vw,1.42rem);
+    line-height:1.25;
+    letter-spacing:-.01em;
+  }
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{
+    font-size:.68rem;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:#4c5a70;
+    background:#f1f4fa;
+    border:1px solid #e6ebf5;
+    border-radius:999px;
+    padding:3px 8px;
+  }
+  .solved{
+    margin-left:auto;
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:.78rem;
+    font-weight:700;
+    color:var(--muted);
+    background:#fbfcff;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:6px 11px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .solved:hover{border-color:var(--green);color:var(--green)}
+  .solved input{accent-color:var(--green);width:15px;height:15px;cursor:pointer}
+  .problem.solved .solved{color:var(--green);border-color:#b8f0e0;background:var(--green-soft)}
+
+  .statement h3,.io h3,.samples h3{
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin:24px 0 8px;
+  }
+  .statement p{margin:0 0 11px}
+  .statement ul,.io ul{margin:0 0 11px;padding-left:22px}
+  .statement li,.io li{margin:0 0 7px}
+  .statement li::marker,.io li::marker{color:#9aa7bd}
+  .statement p:last-child,.io p:last-child,.io ul:last-child{margin-bottom:0}
+
+  .io{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:26px;
+    margin-top:4px;
+  }
+  .io code{
+    background:#f1f4fa;
+    border:1px solid #e6ebf5;
+    border-radius:4px;
+    padding:0 4px;
+    font-size:.86em;
+    color:#334155;
+    white-space:nowrap;
+  }
+
+  /* ---------- Formula ---------- */
+  .formula{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:16px 0;
+    padding:22px 18px;
+    border-radius:12px;
+    background:
+      radial-gradient(500px 160px at 50% 0%, rgba(59,91,219,.25), transparent 70%),
+      #0f172a;
+    color:#f8fafc;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:1.06rem;
+    overflow-x:auto;
+  }
+  .formula .lhs,.formula .rhs{font-style:italic;white-space:nowrap}
+  .formula .sum{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    line-height:1.12;
+    padding:0 4px;
+  }
+  .formula .sigma{font-size:2.35rem;line-height:1;font-style:normal}
+  .formula .lim{font-size:.7rem;white-space:nowrap;color:#dbe5f7}
+  .formula sub{font-size:.68em}
+  .formula .upper{padding-bottom:2px}
+
+  /* ---------- Samples ---------- */
+  .samples{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+    margin-top:12px;
+  }
+  .sample-pair{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    align-items:start;
+  }
+  .sample{
+    border:1px solid var(--line);
+    border-radius:12px;
+    overflow:hidden;
+    background:var(--code-bg);
+  }
+  .sample-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:7px 12px;
+    background:#f1f4fb;
+    border-bottom:1px solid var(--line);
+    font-size:.74rem;
+    font-weight:800;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .sample pre{
+    margin:0;
+    padding:13px 15px;
+    overflow-x:auto;
+    font-size:13px;
+    line-height:1.6;
+    color:#1e293b;
+    tab-size:2;
+  }
+  .copy{
+    appearance:none;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--muted);
+    border-radius:7px;
+    padding:3px 8px;
+    font:inherit;
+    font-size:.66rem;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:border-color .15s,color .15s,background .15s;
+  }
+  .copy:hover{border-color:var(--accent);color:var(--accent)}
+  .copy.copied{border-color:var(--green);color:var(--green);background:var(--green-soft)}
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:36px;
+    padding:26px 0 40px;
+    color:var(--muted);
+    font-size:.82rem;
+    text-align:center;
+  }
+  footer code{background:#eaeff8;border-radius:5px;padding:1px 5px;font-size:.92em}
+
+  @media (max-width:820px){
+    .io{grid-template-columns:1fr;gap:6px}
+    .problem{padding:22px 20px 24px}
+    .problem-head{flex-wrap:wrap}
+    .solved{margin-left:68px}
+  }
+  @media (max-width:700px){
+    .sample-pair{grid-template-columns:1fr}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 15px}
+    .hero{padding:42px 0 36px}
+    .problem-head{gap:12px}
+    .num{width:44px;height:44px;border-radius:12px}
+    .solved{margin-left:56px}
+  }
+
+  @media print{
+    body{background:#fff}
+    .hero{background:#fff;color:#000;padding:0 0 12px}
+    .hero .progress-card,.toc,.copy,.solved,footer{display:none!important}
+    .eyebrow{color:#555}
+    .lede{color:#333}
+    .problem{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid;margin:14px 0}
+    .formula{background:#f3f4f6;color:#000;border:1px solid #ccc}
+    .formula .lim{color:#333}
+    .sample pre{white-space:pre-wrap}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">C Programming · Practice Quiz</p>
+    <h1>Five Classic Problems</h1>
+    <p class="lede">
+      Read each problem statement, write a C program that reads from standard input and writes to
+      standard output, then verify your solution against the sample input and output.
+    </p>
+    <div class="progress-card">
+      <div class="progress-meta">
+        <span>Your progress</span>
+        <strong id="progressText">0 / 5 solved</strong>
+      </div>
+      <div class="bar"><div id="progressBar"></div></div>
+      <div class="progress-actions">
+        <span>Progress is saved in this browser.</span>
+        <button class="reset" id="resetBtn" type="button">Reset progress</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="toc" aria-label="Problems">
+    <a href="#p1"><b>1</b> Banded Matrix</a>
+    <a href="#p2"><b>2</b> Josephus</a>
+    <a href="#p3"><b>3</b> Balanced Parentheses</a>
+    <a href="#p4"><b>4</b> Spiral Matrix</a>
+    <a href="#p5"><b>5</b> Tree Exploration</a>
+  </nav>
+
+  <!-- ================= PROBLEM 1 ================= -->
+  <article class="problem" id="p1">
+    <div class="problem-head">
+      <div class="num">01</div>
+      <div class="titles">
+        <h2>General Banded Matrix Multiplication</h2>
+        <div class="tags">
+          <span class="tag">Matrices</span>
+          <span class="tag">Nested loops</span>
+          <span class="tag">O(N³)</span>
+        </div>
+      </div>
+      <label class="solved"><input type="checkbox" data-solved="1"><span>Solved</span></label>
+    </div>
+
+    <div class="statement">
+      <h3>Description</h3>
+      <p>You are given two N × N banded matrices A and B.</p>
+      <p>A banded matrix is a matrix in which all elements outside the specified bandwidths are zero.</p>
+      <ul>
+        <li>Matrix A has a lower bandwidth p and an upper bandwidth q: A[i][j] = 0 if i − j &gt; p or j − i &gt; q.</li>
+        <li>Matrix B has a lower bandwidth r and an upper bandwidth s: B[i][j] = 0 if i − j &gt; r or j − i &gt; s.</li>
+      </ul>
+      <p>All matrix indices start from 0 (0 ≤ i, j ≤ N − 1).</p>
+      <p>Write a program to calculate the matrix product C = A × B. Each element of C can be calculated with the following formula:</p>
+
+      <div class="formula" role="img"
+           aria-label="C sub i j equals the sum from k equals max of 1, i minus p, j minus s to min of N, i plus q, j plus r of A sub i k times B sub k j">
+        <span class="lhs">C<sub>ij</sub> =</span>
+        <span class="sum">
+          <span class="lim upper">min(N, i+q, j+r)</span>
+          <span class="sigma">Σ</span>
+          <span class="lim lower">k=max(1, i−p, j−s)</span>
+        </span>
+        <span class="rhs">A<sub>ik</sub>B<sub>kj</sub></span>
+      </div>
+
+      <p>If the lower bound of the summation is greater than the upper bound, C[i][j] is 0.</p>
+      <p>Your program must correctly handle matrix boundaries and must not access elements outside the valid array index ranges.</p>
+    </div>
+
+    <div class="io">
+      <section>
+        <h3>Input</h3>
+        <p>The first line contains five integers N, p, q, r, s, separated by spaces:</p>
+        <ul>
+          <li>N: the number of rows and columns of both matrices (1 ≤ N ≤ 20).</li>
+          <li>p, q: the lower and upper bandwidths of matrix A (0 ≤ p, q &lt; N).</li>
+          <li>r, s: the lower and upper bandwidths of matrix B (0 ≤ r, s &lt; N).</li>
+        </ul>
+        <p>The next N lines contain N integers each, representing matrix A.</p>
+        <p>The following N lines contain N integers each, representing matrix B.</p>
+        <p>Each matrix element is an integer between -99 and 99. Both matrices are guaranteed to satisfy their bandwidths.</p>
+      </section>
+      <section>
+        <h3>Output</h3>
+        <p>Print the resulting N × N matrix C: exactly N lines, each containing N integers.</p>
+        <ul>
+          <li>Print every element with the C format specifier <code>%04d</code> (at least 4 characters, padded with leading zeros; for example 7 is printed as <code>0007</code>, -5 as <code>-005</code>, and 12345 as <code>12345</code>).</li>
+          <li>Print zero elements, including those outside the resulting band, as <code>0000</code>.</li>
+          <li>Separate consecutive elements in a line with a single space. No trailing spaces at the end of each line.</li>
+          <li>Do not print any other text, labels, or prompts.</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="samples">
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>4 1 1 1 1
+  1 2 0 0
+  3 4 5 0
+  0 6 7 8
+  0 0 9 10
+  2 1 0 0
+  4 3 2 0
+  0 5 6 7
+  0 0 8 9</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>0010 0007 0004 0000
+  0022 0040 0038 0035
+  0024 0053 0118 0121
+  0000 0045 0134 0153</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>3 0 1 1 0
+  1 2 0
+  0 3 4
+  0 0 5
+  6 0 0
+  7 8 0
+  0 9 10</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>0020 0016 0000
+  0021 0060 0040
+  0000 0045 0050</code></pre>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ================= PROBLEM 2 ================= -->
+  <article class="problem" id="p2">
+    <div class="problem-head">
+      <div class="num">02</div>
+      <div class="titles">
+        <h2>Josephus Problem</h2>
+        <div class="tags">
+          <span class="tag">Simulation</span>
+          <span class="tag">Circular list</span>
+          <span class="tag">Recursion</span>
+        </div>
+      </div>
+      <label class="solved"><input type="checkbox" data-solved="2"><span>Solved</span></label>
+    </div>
+
+    <div class="statement">
+      <h3>Description</h3>
+      <p>There are N people standing in a circle, numbered from 1 to N in clockwise order.</p>
+      <p>Starting with person 1, count people in the clockwise direction. Every K-th person is eliminated from the circle.</p>
+      <p>After each elimination, counting resumes from the next remaining person, starting again from 1.</p>
+      <p>The process continues until only one person remains.</p>
+      <p>Write a program that determines the number of the last remaining person.</p>
+    </div>
+
+    <div class="io">
+      <section>
+        <h3>Input</h3>
+        <p>One line containing two positive integers N and K (1 ≤ N ≤ 1,000, 1 ≤ K ≤ 1,000), separated by a space.</p>
+      </section>
+      <section>
+        <h3>Output</h3>
+        <p>One line containing a single integer: the number of the last remaining person.</p>
+      </section>
+    </div>
+
+    <div class="samples">
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>7 3</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>4</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>5 2</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>3</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 3</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>10 1</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 3</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>10</code></pre>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ================= PROBLEM 3 ================= -->
+  <article class="problem" id="p3">
+    <div class="problem-head">
+      <div class="num">03</div>
+      <div class="titles">
+        <h2>Balanced Parentheses</h2>
+        <div class="tags">
+          <span class="tag">Strings</span>
+          <span class="tag">Stack</span>
+          <span class="tag">Linear scan</span>
+        </div>
+      </div>
+      <label class="solved"><input type="checkbox" data-solved="3"><span>Solved</span></label>
+    </div>
+
+    <div class="statement">
+      <h3>Description</h3>
+      <p>Write a program that determines whether a given sequence of brackets is balanced.</p>
+      <p>The sequence may contain three types of brackets:</p>
+      <ul>
+        <li>Round brackets: <code>()</code></li>
+        <li>Square brackets: <code>[]</code></li>
+        <li>Curly brackets: <code>{}</code></li>
+      </ul>
+      <p>A sequence is balanced if every opening bracket has a corresponding closing bracket of the same type, and all brackets are closed in the correct order (each closing bracket must close the most recently opened bracket that is still open).</p>
+    </div>
+
+    <div class="io">
+      <section>
+        <h3>Input</h3>
+        <p>One line containing a non-empty string of length between 1 and 1,000.</p>
+        <p>The string consists only of the characters <code>(</code> <code>)</code> <code>[</code> <code>]</code> <code>{</code> <code>}</code>, with no spaces.</p>
+      </section>
+      <section>
+        <h3>Output</h3>
+        <p>One line containing:</p>
+        <p><code>Valid</code></p>
+        <p>if the sequence is balanced. Otherwise print:</p>
+        <p><code>Invalid</code></p>
+      </section>
+    </div>
+
+    <div class="samples">
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>{[()()]}</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>Valid</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>{[(])}</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>Invalid</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 3</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>(([]){})</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 3</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>Valid</code></pre>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ================= PROBLEM 4 ================= -->
+  <article class="problem" id="p4">
+    <div class="problem-head">
+      <div class="num">04</div>
+      <div class="titles">
+        <h2>Spiral Matrix Traversal</h2>
+        <div class="tags">
+          <span class="tag">2D arrays</span>
+          <span class="tag">Boundaries</span>
+          <span class="tag">Traversal</span>
+        </div>
+      </div>
+      <label class="solved"><input type="checkbox" data-solved="4"><span>Solved</span></label>
+    </div>
+
+    <div class="statement">
+      <h3>Description</h3>
+      <p>Write a program that reads an N × M integer matrix and prints its elements in clockwise spiral order.</p>
+      <p>The traversal begins at the top-left corner of the matrix, moves to the right first, and continues inward in a clockwise spiral until every element has been printed exactly once.</p>
+    </div>
+
+    <div class="io">
+      <section>
+        <h3>Input</h3>
+        <p>The first line contains two integers N and M (1 ≤ N, M ≤ 30), the number of rows and columns.</p>
+        <p>Each of the next N lines contains M integers, separated by spaces. Every element is between -1000 and 1000.</p>
+      </section>
+      <section>
+        <h3>Output</h3>
+        <p>One line containing all N × M elements in clockwise spiral order, separated by a single space.</p>
+      </section>
+    </div>
+
+    <div class="samples">
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>3 3
+  1 2 3
+  4 5 6
+  7 8 9</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>1 2 3 6 9 8 7 4 5</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>3 4
+  1 2 3 4
+  5 6 7 8
+  9 10 11 12</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>1 2 3 4 8 12 11 10 9 5 6 7</code></pre>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ================= PROBLEM 5 ================= -->
+  <article class="problem" id="p5">
+    <div class="problem-head">
+      <div class="num">05</div>
+      <div class="titles">
+        <h2>Tree Exploration</h2>
+        <div class="tags">
+          <span class="tag">Trees</span>
+          <span class="tag">BFS</span>
+          <span class="tag">Sorting</span>
+        </div>
+      </div>
+      <label class="solved"><input type="checkbox" data-solved="5"><span>Solved</span></label>
+    </div>
+
+    <div class="statement">
+      <h3>Description</h3>
+      <p>You are given a tree containing N nodes, numbered from 1 to N.</p>
+      <p>The connections between nodes are given as pairs in the format <code>{a,b}</code>, which means node a and node b are directly connected.</p>
+      <p>Starting from node 1, your program must explore the tree according to the following rules:</p>
+      <ol>
+        <li>Visit node 1 first.</li>
+        <li>Explore all directly connected, unvisited nodes before exploring nodes farther away.</li>
+        <li>Nodes at the same distance from node 1 must be visited in ascending numerical order.</li>
+        <li>Each node must be visited exactly once.</li>
+      </ol>
+      <p>The distance of a node is the number of connections on the path from node 1 to it. In other words, the nodes are visited in order of distance from node 1, and nodes with the same distance are visited from the smallest number to the largest, no matter which nodes they are connected to.</p>
+      <p>Write a program that prints the order in which the nodes are visited.</p>
+    </div>
+
+    <div class="io">
+      <section>
+        <h3>Input</h3>
+        <p>The first line contains an integer N (1 ≤ N ≤ 100), the number of nodes.</p>
+        <p>Each of the following N − 1 lines contains one connection written exactly as <code>{a,b}</code> (1 ≤ a, b ≤ N, a ≠ b), with no spaces.</p>
+        <p>All connections are bidirectional. The connections may appear in any order, and a node's number may appear on either side of a pair. The input is guaranteed to form a valid tree.</p>
+      </section>
+      <section>
+        <h3>Output</h3>
+        <p>One line containing the visited node numbers in order, separated by a single space.</p>
+        <p>Do not print headings, labels, prompts, or any additional text.</p>
+      </section>
+    </div>
+
+    <div class="samples">
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>5
+  {1,2}
+  {1,3}
+  {2,4}
+  {2,5}</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 1</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>1 2 3 4 5</code></pre>
+        </div>
+      </div>
+      <div class="sample-pair">
+  <div class="sample">
+          <div class="sample-head"><span>Sample Input 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>6
+  {1,4}
+  {4,2}
+  {4,6}
+  {2,3}
+  {3,5}</code></pre>
+        </div>
+  <div class="sample">
+          <div class="sample-head"><span>Sample Output 2</span><button class="copy" type="button">Copy</button></div>
+          <pre><code>1 4 2 6 3 5</code></pre>
+        </div>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="wrap">
+    C practice quiz · Read from <code>stdin</code>, write to <code>stdout</code> · Compile with
+    <code>gcc -std=c11 -O2 solution.c -o solution</code>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "c-programming-quiz-solved-v1";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll("[data-solved]"));
+  var progressText = document.getElementById("progressText");
+  var progressBar = document.getElementById("progressBar");
+  var resetBtn = document.getElementById("resetBtn");
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  var state = loadState();
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      /* storage may be unavailable — progress still works for this session */
+    }
+  }
+
+  function renderProgress() {
+    var solved = boxes.filter(function (box) { return box.checked; }).length;
+    progressText.textContent = solved + " / " + boxes.length + " solved";
+    progressBar.style.width = (boxes.length ? (solved / boxes.length) * 100 : 0) + "%";
+  }
+
+  boxes.forEach(function (box) {
+    var id = box.getAttribute("data-solved");
+    box.checked = Boolean(state[id]);
+    box.closest(".problem").classList.toggle("solved", box.checked);
+
+    box.addEventListener("change", function () {
+      state[id] = box.checked;
+      box.closest(".problem").classList.toggle("solved", box.checked);
+      saveState();
+      renderProgress();
+    });
+  });
+
+  resetBtn.addEventListener("click", function () {
+    state = {};
+    boxes.forEach(function (box) {
+      box.checked = false;
+      box.closest(".problem").classList.remove("solved");
+    });
+    saveState();
+    renderProgress();
+  });
+
+  document.querySelectorAll(".copy").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var code = button.closest(".sample").querySelector("code");
+      var text = code ? code.textContent : "";
+      var done = function () {
+        var old = button.textContent;
+        button.textContent = "Copied ✓";
+        button.classList.add("copied");
+        window.setTimeout(function () {
+          button.textContent = old;
+          button.classList.remove("copied");
+        }, 1300);
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+  });
+
+  function fallbackCopy(text, done) {
+    var area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand("copy"); done(); } catch (e) { /* ignore */ }
+    document.body.removeChild(area);
+  }
+
+  renderProgress();
+})();
+</script>
+</body>
+</html>

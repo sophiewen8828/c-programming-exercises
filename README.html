@@ -593,6 +593,25 @@ footer a{color:var(--navy)}
   .listing figcaption{background:#eee;color:#000}
   a{color:#000;text-decoration:none}
 }
+
+/* ---------- Verbatim problem statements ---------- */
+.box.verbatim{border-left-color:var(--navy-deep);background:#f7f9fc}
+.box.verbatim .label{color:var(--navy-deep)}
+.box.verbatim h4{margin-top:22px}
+.box.verbatim .table-wrap:last-child{margin-bottom:14px}
+.exact-formula{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-style:normal;
+  max-width:100%;
+}
+.exact-formula .lhs,.exact-formula .rhs{font-style:italic;white-space:nowrap}
+.exact-formula .sum{display:inline-flex;flex-direction:column;align-items:center;line-height:1.1;padding:0 4px}
+.exact-formula .sigma{font-size:1.9em;line-height:1;font-style:normal}
+.exact-formula .lim{font-size:.5em;font-style:normal;white-space:nowrap;color:var(--muted)}
+
 </style>
 </head>
 <body>
@@ -799,6 +818,87 @@ footer a{color:var(--navy)}
 <!-- ============================================================ -->
 <section id="p1-banded">
   <h2><span class="kicker">Problem 01 &middot; Structured sparsity</span>General Banded Matrix Multiplication</h2>
+
+<!-- verbatim-statement:p1-banded -->
+<div class="box verbatim">
+  <p class="label">Original problem statement &middot; verbatim</p>
+  <p>You are given two N &times; N banded matrices A and B.</p>
+  <p>A banded matrix is a matrix in which all elements outside the specified bandwidths are zero.</p>
+  <ul>
+    <li>Matrix A has a lower bandwidth p and an upper bandwidth q: A[i][j] = 0 if i &minus; j &gt; p or j &minus; i &gt; q.</li>
+    <li>Matrix B has a lower bandwidth r and an upper bandwidth s: B[i][j] = 0 if i &minus; j &gt; r or j &minus; i &gt; s.</li>
+  </ul>
+  <p>All matrix indices start from 0 (0 &le; i, j &le; N &minus; 1).</p>
+  <p>Write a program to calculate the matrix product C = A &times; B. Each element of C can be calculated with the following formula:</p>
+  <div class="equation exact-formula" role="img" aria-label="C sub i j equals the sum from k equals max of 1, i minus p, j minus s to min of N, i plus q, j plus r of A sub i k times B sub k j">
+    <span class="lhs">C<sub>ij</sub> =</span>
+    <span class="sum">
+      <span class="lim upper">min(N, i+q, j+r)</span>
+      <span class="sigma">&Sigma;</span>
+      <span class="lim lower">k=max(1, i&minus;p, j&minus;s)</span>
+    </span>
+    <span class="rhs">A<sub>ik</sub>B<sub>kj</sub></span>
+  </div>
+  <p>If the lower bound of the summation is greater than the upper bound, C[i][j] is 0.</p>
+  <p>Your program must correctly handle matrix boundaries and must not access elements outside the valid array index ranges.</p>
+
+  <h4>Input</h4>
+  <p>The first line contains five integers N, p, q, r, s, separated by spaces:</p>
+  <ul>
+    <li>N: the number of rows and columns of both matrices (1 &le; N &le; 20).</li>
+    <li>p, q: the lower and upper bandwidths of matrix A (0 &le; p, q &lt; N).</li>
+    <li>r, s: the lower and upper bandwidths of matrix B (0 &le; r, s &lt; N).</li>
+  </ul>
+  <p>The next N lines contain N integers each, representing matrix A.</p>
+  <p>The following N lines contain N integers each, representing matrix B.</p>
+  <p>Each matrix element is an integer between -99 and 99. Both matrices are guaranteed to satisfy their bandwidths.</p>
+
+  <h4>Output</h4>
+  <p>Print the resulting N &times; N matrix C: exactly N lines, each containing N integers.</p>
+  <ul>
+    <li>Print every element with the C format specifier <code>%04d</code> (at least 4 characters, padded with leading zeros; for example 7 is printed as <code>0007</code>, -5 as <code>-005</code>, and 12345 as <code>12345</code>).</li>
+    <li>Print zero elements, including those outside the resulting band, as <code>0000</code>.</li>
+    <li>Separate consecutive elements in a line with a single space. No trailing spaces at the end of each line.</li>
+    <li>Do not print any other text, labels, or prompts.</li>
+  </ul>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Sample input and output</caption>
+      <thead><tr><th style="width:50%">Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><pre class="sample">4 1 1 1 1
+1 2 0 0
+3 4 5 0
+0 6 7 8
+0 0 9 10
+2 1 0 0
+4 3 2 0
+0 5 6 7
+0 0 8 9</pre></td>
+          <td><pre class="sample">0010 0007 0004 0000
+0022 0040 0038 0035
+0024 0053 0118 0121
+0000 0045 0134 0153</pre></td>
+        </tr>
+        <tr>
+          <td><pre class="sample">3 0 1 1 0
+1 2 0
+0 3 4
+0 0 5
+6 0 0
+7 8 0
+0 9 10</pre></td>
+          <td><pre class="sample">0020 0016 0000
+0021 0060 0040
+0000 0045 0050</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- /verbatim-statement:p1-banded -->
   <p class="lead">
     Multiply two square matrices that are mostly zero, and exploit the known shape of
     the zeros instead of paying for a full cubic product.
@@ -1077,6 +1177,35 @@ int main(void)
 <!-- ============================================================ -->
 <section id="p2-josephus">
   <h2><span class="kicker">Problem 02 &middot; Mathematical reduction</span>The Josephus Problem</h2>
+
+<!-- verbatim-statement:p2-josephus -->
+<div class="box verbatim">
+  <p class="label">Original problem statement &middot; verbatim</p>
+  <p>There are N people standing in a circle, numbered from 1 to N in clockwise order.</p>
+  <p>Starting with person 1, count people in the clockwise direction. Every K-th person is eliminated from the circle.</p>
+  <p>After each elimination, counting resumes from the next remaining person, starting again from 1.</p>
+  <p>The process continues until only one person remains.</p>
+  <p>Write a program that determines the number of the last remaining person.</p>
+
+  <h4>Input</h4>
+  <p>One line containing two positive integers N and K (1 &le; N &le; 1,000, 1 &le; K &le; 1,000), separated by a space.</p>
+
+  <h4>Output</h4>
+  <p>One line containing a single integer: the number of the last remaining person.</p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Sample input and output</caption>
+      <thead><tr><th>Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr><td><pre class="sample">7 3</pre></td><td><pre class="sample">4</pre></td></tr>
+        <tr><td><pre class="sample">5 2</pre></td><td><pre class="sample">3</pre></td></tr>
+        <tr><td><pre class="sample">10 1</pre></td><td><pre class="sample">10</pre></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- /verbatim-statement:p2-josephus -->
   <p class="lead">
     A circular elimination process with a simple recurrence hiding underneath it: do not
     simulate the circle if you can renumber it.
@@ -1317,6 +1446,42 @@ int main(void)
 <!-- ============================================================ -->
 <section id="p3-parentheses">
   <h2><span class="kicker">Problem 03 &middot; LIFO discipline</span>Balanced Parentheses</h2>
+
+<!-- verbatim-statement:p3-parentheses -->
+<div class="box verbatim">
+  <p class="label">Original problem statement &middot; verbatim</p>
+  <p>Write a program that determines whether a given sequence of brackets is balanced.</p>
+  <p>The sequence may contain three types of brackets:</p>
+  <ul>
+    <li>Round brackets: <code>()</code></li>
+    <li>Square brackets: <code>[]</code></li>
+    <li>Curly brackets: <code>{}</code></li>
+  </ul>
+  <p>A sequence is balanced if every opening bracket has a corresponding closing bracket of the same type, and all brackets are closed in the correct order (each closing bracket must close the most recently opened bracket that is still open).</p>
+
+  <h4>Input</h4>
+  <p>One line containing a non-empty string of length between 1 and 1,000.</p>
+  <p>The string consists only of the characters <code>(</code> <code>)</code> <code>[</code> <code>]</code> <code>{</code> <code>}</code>, with no spaces.</p>
+
+  <h4>Output</h4>
+  <p>One line containing:</p>
+  <p><code>Valid</code></p>
+  <p>if the sequence is balanced. Otherwise print:</p>
+  <p><code>Invalid</code></p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Sample input and output</caption>
+      <thead><tr><th>Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr><td><pre class="sample">{[()()]}</pre></td><td><pre class="sample">Valid</pre></td></tr>
+        <tr><td><pre class="sample">{[(])}</pre></td><td><pre class="sample">Invalid</pre></td></tr>
+        <tr><td><pre class="sample">(([]){})</pre></td><td><pre class="sample">Valid</pre></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- /verbatim-statement:p3-parentheses -->
   <p class="lead">
     Nesting is a last-in, first-out property. A stack turns that observation into a
     linear-time decision procedure for strings of round, square, and curly brackets.
@@ -1540,6 +1705,44 @@ int main(void)
 <!-- ============================================================ -->
 <section id="p4-spiral">
   <h2><span class="kicker">Problem 04 &middot; Boundary simulation</span>Spiral Matrix Traversal</h2>
+
+<!-- verbatim-statement:p4-spiral -->
+<div class="box verbatim">
+  <p class="label">Original problem statement &middot; verbatim</p>
+  <p>Write a program that reads an N &times; M integer matrix and prints its elements in clockwise spiral order.</p>
+  <p>The traversal begins at the top-left corner of the matrix, moves to the right first, and continues inward in a clockwise spiral until every element has been printed exactly once.</p>
+
+  <h4>Input</h4>
+  <p>The first line contains two integers N and M (1 &le; N, M &le; 30), the number of rows and columns.</p>
+  <p>Each of the next N lines contains M integers, separated by spaces. Every element is between -1000 and 1000.</p>
+
+  <h4>Output</h4>
+  <p>One line containing all N &times; M elements in clockwise spiral order, separated by a single space.</p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Sample input and output</caption>
+      <thead><tr><th style="width:50%">Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><pre class="sample">3 3
+1 2 3
+4 5 6
+7 8 9</pre></td>
+          <td><pre class="sample">1 2 3 6 9 8 7 4 5</pre></td>
+        </tr>
+        <tr>
+          <td><pre class="sample">3 4
+1 2 3 4
+5 6 7 8
+9 10 11 12</pre></td>
+          <td><pre class="sample">1 2 3 4 8 12 11 10 9 5 6 7</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- /verbatim-statement:p4-spiral -->
   <p class="lead">
     Peel the matrix like an onion. Four moving boundaries describe the unvisited region,
     and four sweeps print its outer layer in clockwise order.
@@ -1810,6 +2013,58 @@ int main(void)
 <!-- ============================================================ -->
 <section id="p5-tree">
   <h2><span class="kicker">Problem 05 &middot; Hierarchy and distance</span>Tree Exploration</h2>
+
+<!-- verbatim-statement:p5-tree -->
+<div class="box verbatim">
+  <p class="label">Original problem statement &middot; verbatim</p>
+  <p>You are given a tree containing N nodes, numbered from 1 to N.</p>
+  <p>The connections between nodes are given as pairs in the format <code>{a,b}</code>, which means node a and node b are directly connected.</p>
+  <p>Starting from node 1, your program must explore the tree according to the following rules:</p>
+  <ol>
+    <li>Visit node 1 first.</li>
+    <li>Explore all directly connected, unvisited nodes before exploring nodes farther away.</li>
+    <li>Nodes at the same distance from node 1 must be visited in ascending numerical order.</li>
+    <li>Each node must be visited exactly once.</li>
+  </ol>
+  <p>The distance of a node is the number of connections on the path from node 1 to it. In other words, the nodes are visited in order of distance from node 1, and nodes with the same distance are visited from the smallest number to the largest, no matter which nodes they are connected to.</p>
+  <p>Write a program that prints the order in which the nodes are visited.</p>
+
+  <h4>Input</h4>
+  <p>The first line contains an integer N (1 &le; N &le; 100), the number of nodes.</p>
+  <p>Each of the following N &minus; 1 lines contains one connection written exactly as <code>{a,b}</code> (1 &le; a, b &le; N, a &ne; b), with no spaces.</p>
+  <p>All connections are bidirectional. The connections may appear in any order, and a node's number may appear on either side of a pair. The input is guaranteed to form a valid tree.</p>
+
+  <h4>Output</h4>
+  <p>One line containing the visited node numbers in order, separated by a single space.</p>
+  <p>Do not print headings, labels, prompts, or any additional text.</p>
+
+  <div class="table-wrap">
+    <table class="table-compact">
+      <caption>Sample input and output</caption>
+      <thead><tr><th style="width:50%">Input</th><th>Output</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><pre class="sample">5
+{1,2}
+{1,3}
+{2,4}
+{2,5}</pre></td>
+          <td><pre class="sample">1 2 3 4 5</pre></td>
+        </tr>
+        <tr>
+          <td><pre class="sample">6
+{1,4}
+{4,2}
+{4,6}
+{2,3}
+{3,5}</pre></td>
+          <td><pre class="sample">1 4 2 6 3 5</pre></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- /verbatim-statement:p5-tree -->
   <p class="lead">
     Explore a tree level by level, and impose a deterministic order inside each level.
     Breadth-first search supplies the levels; sorting supplies the tie-break.
