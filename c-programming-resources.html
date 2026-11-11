@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C Programming Practice Resources · Level Up Guide</title>
+<style>
+  :root{
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --ink:#1b2430;
+    --muted:#5b6778;
+    --line:#e2e7f0;
+    --navy:#1f3a5f;
+    --navy-deep:#14283f;
+    --navy-soft:#e9eff7;
+    --accent:#3b5bdb;
+    --accent-soft:#eef2ff;
+    --green:#0ca678;
+    --green-soft:#e6fcf5;
+    --amber:#a85a12;
+    --amber-soft:#fdf2e5;
+    --purple:#5a4685;
+    --purple-soft:#f1edf9;
+    --code-bg:#f8faff;
+    --shadow:0 10px 30px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+  code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:
+      radial-gradient(900px 400px at 12% -10%, rgba(59,91,219,.45), transparent 60%),
+      radial-gradient(700px 350px at 100% 0%, rgba(12,166,120,.35), transparent 55%),
+      #0f172a;
+    color:#f8fafc;
+    padding:54px 0 44px;
+  }
+  .eyebrow{
+    margin:0 0 10px;
+    font-size:.76rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:#9db4ff;
+    font-weight:700;
+  }
+  .hero h1{
+    margin:0;
+    font-size:clamp(1.9rem,4vw,2.8rem);
+    line-height:1.15;
+    letter-spacing:-.02em;
+  }
+  .lede{
+    margin:14px 0 0;
+    max-width:700px;
+    color:#c9d4e8;
+    font-size:1.02rem;
+  }
+  .hero-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .chip{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:.8rem;
+    font-weight:600;
+    color:#dbe5f7;
+  }
+  .chip b{color:#fff}
+
+  /* ---------- Table of contents ---------- */
+  .toc{display:flex;flex-wrap:wrap;gap:8px;padding:22px 0 0}
+  .toc a{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#fff;
+    border:1px solid var(--line);
+    color:var(--muted);
+    text-decoration:none;
+    font-size:.8rem;
+    font-weight:600;
+    box-shadow:0 2px 8px rgba(15,23,42,.03);
+    transition:border-color .15s,color .15s,transform .15s;
+  }
+  .toc a:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+
+  /* ---------- Sections ---------- */
+  section{scroll-margin-top:24px}
+  .section-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:30px 32px;
+    margin:26px 0;
+    box-shadow:var(--shadow);
+  }
+  .kicker{
+    display:block;
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    color:var(--accent);
+    margin-bottom:6px;
+  }
+  h2{
+    margin:0 0 14px;
+    font-size:clamp(1.25rem,2.4vw,1.55rem);
+    line-height:1.25;
+    letter-spacing:-.01em;
+  }
+  h3{margin:26px 0 10px;font-size:1.05rem}
+  p{margin:0 0 12px}
+  .section-card > p:last-child,
+  .section-card ul:last-child,
+  .section-card ol:last-child{margin-bottom:0}
+  a{color:var(--navy);font-weight:600}
+
+  /* ---------- Tables ---------- */
+  .table-wrap{overflow-x:auto;margin:18px 0 6px}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{
+    font-size:.7rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--muted);
+    border-bottom:2px solid #d5dce8;
+    white-space:nowrap;
+  }
+  tbody tr:hover{background:#f8faff}
+  tbody tr:last-child td{border-bottom:none}
+
+  /* ---------- Repo / book cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin:16px 0 4px}
+  .card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+    background:var(--code-bg);
+    transition:border-color .15s,transform .15s;
+  }
+  .card:hover{border-color:#b9c6dd;transform:translateY(-2px)}
+  .card h3{margin:0 0 8px;font-size:1rem}
+  .card p{margin:0;font-size:.88rem;color:var(--muted)}
+  .card .tag{
+    display:inline-block;
+    font-size:.66rem;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#4c5a70;
+    background:#eef2f9;
+    border:1px solid #e0e7f2;
+    border-radius:999px;
+    padding:3px 9px;
+    margin:0 0 10px;
+  }
+  .card .tag.study{color:var(--navy);background:var(--navy-soft);border-color:#cfdcee}
+  .card .tag.build{color:var(--green);background:var(--green-soft);border-color:#c8ecdf}
+  .card .tag.book{color:var(--amber);background:var(--amber-soft);border-color:#f0dcc4}
+  .card .lang{color:var(--purple);background:var(--purple-soft);border-color:#e3dcf0}
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    border-left:4px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 12px 12px 0;
+    padding:14px 18px;
+    margin:16px 0;
+    font-size:.94rem;
+  }
+  .callout.green{border-left-color:var(--green);background:var(--green-soft)}
+  .callout.amber{border-left-color:var(--amber);background:var(--amber-soft)}
+  .callout p{margin:0}
+  .callout strong{color:var(--navy-deep)}
+
+  /* ---------- Study plan timeline ---------- */
+  .plan{list-style:none;margin:18px 0 4px;padding:0;counter-reset:week}
+  .plan li{
+    position:relative;
+    counter-increment:week;
+    padding:4px 0 18px 64px;
+  }
+  .plan li::before{
+    content:"W" counter(week);
+    position:absolute;left:0;top:2px;
+    display:grid;place-items:center;
+    width:46px;height:46px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#3b5bdb,#5c7cfa);
+    color:#fff;
+    font-weight:800;
+    font-size:.78rem;
+    letter-spacing:.02em;
+    box-shadow:0 6px 16px rgba(59,91,219,.25);
+  }
+  .plan li:nth-child(2)::before{background:linear-gradient(135deg,#0ca678,#20c997);box-shadow:0 6px 16px rgba(12,166,120,.25)}
+  .plan li:nth-child(3)::before{background:linear-gradient(135deg,#a85a12,#d07828);box-shadow:0 6px 16px rgba(168,90,18,.25)}
+  .plan li:nth-child(4)::before{background:linear-gradient(135deg,#5a4685,#7a62a8);box-shadow:0 6px 16px rgba(90,70,133,.25)}
+  .plan li:not(:last-child)::after{
+    content:"";
+    position:absolute;left:22px;top:52px;bottom:2px;
+    width:2px;background:var(--line);
+  }
+  .plan h3{margin:6px 0 6px}
+  .plan p{margin:0;font-size:.93rem;color:var(--muted)}
+  .plan code{
+    background:#eef2f9;border-radius:4px;padding:0 5px;
+    font-size:.86em;color:#334155;white-space:nowrap;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    margin-top:36px;
+    padding:26px 0 40px;
+    color:var(--muted);
+    font-size:.82rem;
+    text-align:center;
+  }
+  footer a{color:var(--navy)}
+
+  @media (max-width:640px){
+    .section-card{padding:22px 18px}
+    .plan li{padding-left:56px}
+    .plan li::before{width:40px;height:40px;font-size:.68rem}
+    .plan li:not(:last-child)::after{left:19px}
+  }
+  @media print{
+    body{background:#fff}
+    .hero{background:#fff;color:#000;padding:0 0 12px}
+    .hero .lede{color:#333}
+    .eyebrow{color:#555}
+    .section-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+    .card:hover{transform:none}
+    tbody tr:hover{background:none}
+    .toc{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">C Programming · Curated Resources</p>
+    <h1>Where to Practise C</h1>
+    <p class="lede">
+      You have finished the five classic exercises in this repository. This guide
+      collects the websites, GitHub repositories, courses, and books that keep that
+      momentum going — plus a realistic four-week plan for improving quickly.
+    </p>
+    <div class="hero-chips">
+      <span class="chip"><b>8</b> practice sites</span>
+      <span class="chip"><b>4</b> repos to study</span>
+      <span class="chip"><b>4</b> courses &amp; books</span>
+      <span class="chip"><b>4-week</b> study plan</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <nav class="toc" aria-label="Sections">
+    <a href="#sites">Practice sites</a>
+    <a href="#repos">GitHub repos</a>
+    <a href="#courses">Courses &amp; books</a>
+    <a href="#taiwan">Traditional Chinese resources</a>
+    <a href="#plan">Four-week plan</a>
+  </nav>
+
+  <!-- ================= Practice sites ================= -->
+  <section id="sites" class="section-card">
+    <span class="kicker">Interactive judges</span>
+    <h2>Practice sites — solve, submit, get judged</h2>
+    <p>
+      Online judges give instant feedback and let you compare your solution with
+      others after it passes — the fastest feedback loop for improving in a short
+      period. Solve in C even when other languages are offered.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Site</th><th>Best for</th><th>Why it fits</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="https://exercism.org/tracks/c">Exercism — C track</a></td>
+            <td>Structured ramp-up</td>
+            <td>Free, ~120 small-to-large exercises with human mentoring and code review. The gentlest structured start.</td>
+          </tr>
+          <tr>
+            <td><a href="https://leetcode.com">LeetCode</a></td>
+            <td>Topic drilling</td>
+            <td>Huge problem bank; filter by topic (arrays, strings, linked lists, trees) and difficulty.</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.hackerrank.com/domains/c">HackerRank — C track</a></td>
+            <td>Daily volume</td>
+            <td>Gentle intro track, then algorithm domains for steady daily practice.</td>
+          </tr>
+          <tr>
+            <td><a href="https://codeforces.com">Codeforces</a></td>
+            <td>Rated practice</td>
+            <td>Timed contests and problems rated 800–3500, so you can always pick your exact level.</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.spoj.com">SPOJ</a> / <a href="https://onlinejudge.org">UVa Online Judge</a></td>
+            <td>Classic volume</td>
+            <td>Thousands of classic problems; UVa is the judge behind Taiwan's CPE exam.</td>
+          </tr>
+          <tr>
+            <td><a href="https://www.codingame.com">CodinGame</a></td>
+            <td>Fun practice</td>
+            <td>Write C code that plays games — makes daily practice feel like play.</td>
+          </tr>
+          <tr>
+            <td><a href="https://projecteuler.net">Project Euler</a></td>
+            <td>Numeric C skills</td>
+            <td>Math-flavoured problems that exercise integer handling and overflow reasoning.</td>
+          </tr>
+          <tr>
+            <td><a href="https://adventofcode.com">Advent of Code</a></td>
+            <td>Seasonal streaks</td>
+            <td>25 puzzles every December; past years stay online — do them all in C.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Tip.</strong> Always compile with
+      <code>gcc -std=c11 -Wall -Wextra -Werror</code> while practising, even on sites
+      that accept looser code. Warnings are free lessons.</p>
+    </div>
+  </section>
+
+  <!-- ================= GitHub repos ================= -->
+  <section id="repos" class="section-card">
+    <span class="kicker">Study and steal habits</span>
+    <h2>GitHub repositories to study</h2>
+    <p>
+      Reading well-written C is as valuable as writing it. Clone these, read the
+      implementations, and compare them against your own solutions to the same problems.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <span class="tag study">Reference implementations</span>
+        <h3><a href="https://github.com/TheAlgorithms/C">TheAlgorithms/C</a></h3>
+        <p>Every classic algorithm implemented in readable C. Compare your solutions against the reference after you solve.</p>
+      </div>
+      <div class="card">
+        <span class="tag study">Curated index</span>
+        <h3><a href="https://github.com/aleksandar-todorovic/awesome-c">awesome-c</a></h3>
+        <p>A curated index of the whole C ecosystem: tutorials, libraries, books, and tools.</p>
+      </div>
+      <div class="card">
+        <span class="tag study">Project ideas</span>
+        <h3><a href="https://github.com/karan/Projects">karan/Projects</a></h3>
+        <p>A mega-list of practice project ideas, from small utilities to full applications.</p>
+      </div>
+      <div class="card">
+        <span class="tag build">Build real software</span>
+        <h3><a href="https://github.com/codecrafters-io/build-your-own-x">build-your-own-x</a></h3>
+        <p>Guided tutorials to build your own git, database, shell, or text editor in C — the fastest jump from exercises to real C skill.</p>
+      </div>
+      <div class="card">
+        <span class="tag build">Text editor</span>
+        <h3><a href="https://viewsourcecode.org/snaptoken/kilo/">Build Your Own Text Editor</a></h3>
+        <p>Step-by-step tutorial for writing the <em>kilo</em> editor in ~1000 lines of C. Teaches terminal handling, dynamic buffers, and low-level I/O.</p>
+      </div>
+      <div class="card">
+        <span class="tag build">Database</span>
+        <h3><a href="https://cstack.db.torque.build/">Let's Build a Simple Database</a></h3>
+        <p>Recreate a SQLite clone from scratch in C. Memory, files, and a virtual machine — end to end.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Courses & books ================= -->
+  <section id="courses" class="section-card">
+    <span class="kicker">Structured learning</span>
+    <h2>Courses &amp; books with exercises</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="tag study">Free course</span>
+        <h3><a href="https://cs50.harvard.edu/x/">CS50x — Harvard</a></h3>
+        <p>The first half is pure C: pointers, memory, linked lists, hash tables, tries, JPEG recovery, and forensics labs. The best-structured C curriculum anywhere.</p>
+      </div>
+      <div class="card">
+        <span class="tag book">Classic book</span>
+        <h3>K&amp;R — <em>The C Programming Language</em></h3>
+        <p>Still the gold standard. Doing its exercises teaches C idioms nobody else covers. Pair with community solution repos for comparison.</p>
+      </div>
+      <div class="card">
+        <span class="tag book">Free book</span>
+        <h3><a href="https://gustedt.gitlabpages.inria.fr/modern-c/">Modern C — Jens Gustedt</a></h3>
+        <p>C17/C23 idioms and pitfalls with exercises, free to read online. Modernises habits learned from older material.</p>
+      </div>
+      <div class="card">
+        <span class="tag study">Free guides</span>
+        <h3><a href="https://beej.us/guide/">Beej's Guides</a></h3>
+        <p>Legendary free guides to C and network programming (sockets) with exercises. The friendly classic for systems-level C.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Traditional Chinese resources ================= -->
+  <section id="taiwan" class="section-card">
+    <span class="kicker">Bonus · <span lang="zh-Hant">中文資源</span></span>
+    <h2>Traditional Chinese resources</h2>
+    <div class="cards">
+      <div class="card">
+        <span class="tag lang">大學程式能力檢定</span>
+        <h3><a href="https://cpe.cse.nsysu.edu.tw/">CPE</a></h3>
+        <p lang="zh-Hant">台灣的大學程式能力檢定，考古題附難度分級。本倉庫的五題經典題（帶狀矩陣、約瑟夫問題等）正是這類題型——考試實戰的最佳來源。</p>
+      </div>
+      <div class="card">
+        <span class="tag lang">線上解題系統</span>
+        <h3><a href="https://zerojudge.tw">ZeroJudge</a></h3>
+        <p lang="zh-Hant">台灣高中生與大學生常用的線上解題平台，題庫龐大、介面全中文。</p>
+      </div>
+      <div class="card">
+        <span class="tag lang">演算法參考</span>
+        <h3><a href="http://web.ntnu.edu.tw/~algo/">演算法筆記</a></h3>
+        <p lang="zh-Hant">師大維護的演算法筆記，深度與廣度兼具的繁體中文參考資料，附大量例題。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Four-week plan ================= -->
+  <section id="plan" class="section-card">
+    <span class="kicker">Short-period improvement</span>
+    <h2>A realistic four-week plan</h2>
+    <p>
+      The single biggest lever is <strong>daily consistency</strong> plus always
+      <strong>reading someone else's solution after your own works</strong>. Two months
+      of that visibly changes your C fluency; four focused weeks already moves you a level.
+    </p>
+    <ol class="plan">
+      <li>
+        <h3>Volume</h3>
+        <p>Solve two easy problems a day on Exercism or Codeforces (rated ≤ 1000).
+        Always compile with <code>gcc -std=c11 -Wall -Wextra -Werror</code>.</p>
+      </li>
+      <li>
+        <h3>Data structures from scratch</h3>
+        <p>Write your own dynamic array, hash map, linked list, and binary heap in C,
+        each with a test harness — reuse this repository's
+        <code>run_tests.sh</code> pattern.</p>
+      </li>
+      <li>
+        <h3>Medium problems</h3>
+        <p>Move to LeetCode or UVa medium-tier problems in your weakest topics.
+        After each solve, read the top-ranked solution and note what it does better.</p>
+      </li>
+      <li>
+        <h3>A real project</h3>
+        <p>Build the kilo text editor or the SQLite-clone tutorial end to end.
+        Pointers, <code>malloc</code> discipline, and struct design finally cement here.</p>
+      </li>
+    </ol>
+    <div class="callout green">
+      <p><strong>Progress rule.</strong> A problem counts as solved only when your
+      program passes every test <em>and</em> you can explain its invariants out loud
+      without reading the code — the same standard this repository's study guide uses.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Companion page of the <a href="README.html">Five Classic C Exercises study guide</a> ·
+    Practice daily · Read others' code · <a href="c-programming-quiz.html">Take the quiz again</a>
+  </div>
+</footer>
+
+</body>
+</html>
